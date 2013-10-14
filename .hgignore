@@ -30,7 +30,6 @@ syntax: glob
 *.apk
 *.dex
 *.cache
-Makefile
 Makefile.in
 aclocal.m4
 autom4te.cache/output.0
