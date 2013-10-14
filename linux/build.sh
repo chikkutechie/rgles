@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ~/rgl/linux  && make $*
+cd ~/rgles/linux  && make $*
 
