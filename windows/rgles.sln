@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rgl", "rgl\rgl.vcxproj", "{F9A0612B-714D-4FC6-96C2-C6597CC82086}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rgles", "rgles\rgles.vcxproj", "{F9A0612B-714D-4FC6-96C2-C6597CC82086}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "transformations", "transformations\transformations.vcxproj", "{E9230833-AC6B-4092-B601-6926E40E12ED}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -32,14 +32,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lighting", "lighting\lighti
 		{874E1A97-10C6-4B39-AEA1-3140C0A34BBC} = {874E1A97-10C6-4B39-AEA1-3140C0A34BBC}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lighting_gl", "lighting_gl\lighting_gl.vcxproj", "{4B82A9B3-E00A-4288-B106-D210AFF572BE}"
-	ProjectSection(ProjectDependencies) = postProject
-		{874E1A97-10C6-4B39-AEA1-3140C0A34BBC} = {874E1A97-10C6-4B39-AEA1-3140C0A34BBC}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "appfw", "appfw\appfw.vcxproj", "{874E1A97-10C6-4B39-AEA1-3140C0A34BBC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "appfwtest", "appfwtest\appfwtest.vcxproj", "{BB982693-0F32-44CB-933E-28D2CB290DF5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "guitest", "guitest\guitest.vcxproj", "{BB982693-0F32-44CB-933E-28D2CB290DF5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{874E1A97-10C6-4B39-AEA1-3140C0A34BBC} = {874E1A97-10C6-4B39-AEA1-3140C0A34BBC}
 	EndProjectSection
@@ -74,10 +69,6 @@ Global
 		{BE67F943-25EB-4D83-B9FA-F0D689D4A5EF}.Debug|Win32.Build.0 = Debug|Win32
 		{BE67F943-25EB-4D83-B9FA-F0D689D4A5EF}.Release|Win32.ActiveCfg = Release|Win32
 		{BE67F943-25EB-4D83-B9FA-F0D689D4A5EF}.Release|Win32.Build.0 = Release|Win32
-		{4B82A9B3-E00A-4288-B106-D210AFF572BE}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4B82A9B3-E00A-4288-B106-D210AFF572BE}.Debug|Win32.Build.0 = Debug|Win32
-		{4B82A9B3-E00A-4288-B106-D210AFF572BE}.Release|Win32.ActiveCfg = Release|Win32
-		{4B82A9B3-E00A-4288-B106-D210AFF572BE}.Release|Win32.Build.0 = Release|Win32
 		{874E1A97-10C6-4B39-AEA1-3140C0A34BBC}.Debug|Win32.ActiveCfg = Debug|Win32
 		{874E1A97-10C6-4B39-AEA1-3140C0A34BBC}.Debug|Win32.Build.0 = Debug|Win32
 		{874E1A97-10C6-4B39-AEA1-3140C0A34BBC}.Release|Win32.ActiveCfg = Release|Win32

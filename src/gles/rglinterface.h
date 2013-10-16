@@ -87,6 +87,20 @@ public:
     virtual void material( GLenum face, GLenum pname, const GLfloat *params ) = 0;
     virtual void normal( GLfloat nx, GLfloat ny, GLfloat nz ) = 0;
 
+    /* textures */
+    virtual void bindTexture (GLenum target, GLuint texture) = 0;
+    virtual void genTextures( GLsizei n, GLuint *textures ) = 0;
+    virtual void deleteTextures( GLsizei n, const GLuint *textures ) = 0;
+
+    virtual void texCoordPointer( GLint size, GLenum type, GLsizei stride,
+								  const GLvoid *pointer ) = 0;
+    virtual void texEnv(GLenum target, GLenum pname, const GLint *params) = 0;
+
+    virtual void texImage2D ( GLenum target, GLint level, GLint internalformat,
+								GLsizei width, GLsizei height, GLint border,
+								GLenum format, GLenum type, const GLvoid *pixels ) = 0;
+    virtual void texParameter(GLenum target, GLenum pname, const GLint *params) = 0;
+
     /* error value */
     virtual GLenum getError() = 0;
 

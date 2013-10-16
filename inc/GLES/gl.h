@@ -118,6 +118,36 @@ typedef void GLvoid;
 
 #define GL_LIGHTING                       0x0B50
 
+/* texture */
+#define GL_TEXTURE_2D                     0x0DE1
+
+/* TextureWrapMode */
+#define GL_CLAMP                          0x2900
+#define GL_REPEAT                         0x2901
+
+/* TextureEnvParameter */
+#define GL_TEXTURE_ENV_MODE               0x2200
+#define GL_TEXTURE_ENV_COLOR              0x2201
+
+/* TextureMagFilter */
+#define GL_NEAREST                        0x2600
+#define GL_LINEAR                         0x2601
+
+/* TextureParameterName */
+#define GL_TEXTURE_MAG_FILTER             0x2800
+#define GL_TEXTURE_MIN_FILTER             0x2801
+#define GL_TEXTURE_WRAP_S                 0x2802
+#define GL_TEXTURE_WRAP_T                 0x2803
+
+/* TextureEnvTarget */
+#define GL_TEXTURE_ENV                    0x2300
+
+/* TextureEnvMode */
+#define GL_MODULATE                       0x2100
+#define GL_DECAL                          0x2101
+#define GL_REPLACE                        0x1E01
+#define GL_BLEND                          0x0BE2
+
 /* face */
 #define GL_FRONT_AND_BACK                 0x0408
 
@@ -217,9 +247,7 @@ GLAPI void GLAPIENTRY glTexImage2D (GLenum target, GLint level, GLint internalfo
 									  GLenum format, GLenum type, const GLvoid *pixels);
 GLAPI void GLAPIENTRY glTexParameteri (GLenum target, GLenum pname, GLint param);
 GLAPI void GLAPIENTRY glTexParameteriv (GLenum target, GLenum pname, const GLint *params);
-GLAPI void GLAPIENTRY glTexSubImage2D (GLenum target, GLint level, GLint xoffset,
-										 GLint yoffset, GLsizei width, GLsizei height,
-										 GLenum format, GLenum type, const GLvoid *pixels);
+GLAPI void GLAPIENTRY glBindTexture (GLenum target, GLuint texture);
 
 /* clear operations */
 GLAPI void GLAPIENTRY glClearColor( GLclampf r, GLclampf g, GLclampf b,

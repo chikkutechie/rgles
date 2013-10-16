@@ -3,6 +3,7 @@
 
 #include "GUI/rwin.h"
 #include "GUI/rapp.h"
+#include "GLES/gl.h"
 #include "EGL/egl.h"
 
 #ifndef ARRAYSIZE

@@ -3,6 +3,7 @@
 
 #include "GUI/rapp.h"
 #include "GUI/rglwin.h"
+#include "GLES/gl.h"
 #include "EGL/egl.h"
 
 

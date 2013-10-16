@@ -7,9 +7,47 @@
 #include "rglinterface.h"
 
 #include <vector>
+#include <map>
 
+#define GL_MAX_LIGHT_UNITS      1
+#define GL_MAX_TEXTURE_UNITS    1
 
-#define GL_MAX_LIGHT_UNITS 1
+class RGLInterfaceImplV_1_0TextureUnit
+{
+public:
+    RGLInterfaceImplV_1_0TextureUnit()
+     : mMode(GL_MODULATE),
+       mBoundTexture(0)
+    {}
+
+    GLint mMode;
+    RGLColorf mColor;
+    GLuint mBoundTexture;
+};
+
+class RGLInterfaceImplV_1_0Texture
+{
+public:
+    RGLInterfaceImplV_1_0Texture()
+     : target(GL_TEXTURE_2D),
+       level(0),
+       pixels(0)
+    {}
+
+    GLenum target;
+    GLint level;
+    GLint internalformat;
+    GLsizei width;
+    GLsizei height;
+    GLint border;
+    GLenum format;
+    GLenum type;
+    GLvoid *pixels;
+};
+
+typedef std::map<GLuint, RGLInterfaceImplV_1_0Texture*> TextureList;
+typedef TextureList::iterator TextureListIter;
+typedef TextureList::const_iterator TextureListConstIter;
 
 class RGLInterfaceImplV_1_0Light
 {
@@ -93,7 +131,8 @@ public:
           mNormalArray( false ),
           mTexCoordArray( false ),
           mColorMaterial(false),
-          mLighting( false )
+          mLighting( false ),
+          mTexture2D( false )
     {
         for (int i=0; i<GL_MAX_LIGHT_UNITS; ++i)
         {
@@ -109,6 +148,7 @@ public:
     bool mColorMaterial;
     bool mLighting;
     bool mLights[GL_MAX_LIGHT_UNITS];
+    bool mTexture2D;
 };
 
 class RGLInterfaceImplV_1_0Funcs
@@ -138,10 +178,17 @@ public:
           mWidth( 0 ),
           mHeight( 0 ),
           mError( GL_NO_ERROR ),
-          mMatrixMode( GL_PROJECTION )
+          mMatrixMode( GL_PROJECTION ),
+          mCurrentActiveTexture( 0 )
     {
         mDepthRange[0] = 0.0f;
         mDepthRange[1] = 1.0f;
+
+        for (int i=0; i<GL_MAX_TEXTURE_UNITS; ++i)
+        {
+            mActiveTextures[i] = 0;
+        }
+        mActiveTextures[0] = 1;
     }
 
     RGLColorf mClearColor;
@@ -163,11 +210,16 @@ public:
     RGLInterfaceImplV_1_0VertexData mVertexData;
     RGLInterfaceImplV_1_0VertexData mColorData;
     RGLInterfaceImplV_1_0VertexData mNormalData;
+    RGLInterfaceImplV_1_0VertexData mTexCoordData;
     RGLInterfaceImplV_1_0Buffers mBuffers;
     RGLInterfaceImplV_1_0Feature mFeature;
     RGLInterfaceImplV_1_0Funcs mFuncs;
     RGLInterfaceImplV_1_0Material mMaterial;
     RGLInterfaceImplV_1_0Light mLights[GL_MAX_LIGHT_UNITS];
+    TextureList mTextures;
+    GLuint mActiveTextures[GL_MAX_TEXTURE_UNITS];
+    GLuint mCurrentActiveTexture;
+    RGLInterfaceImplV_1_0TextureUnit mTextureUnits[GL_MAX_TEXTURE_UNITS];
 };
 
 class RGLInterfaceImplV_1_0Primitive
@@ -326,8 +378,21 @@ public:
     void light( GLenum light, GLenum pname, const GLfloat *params );
     void material( GLenum face, GLenum pname, const GLfloat *params );
 
+    /* textures */
+    void bindTexture (GLenum target, GLuint texture);
+    void genTextures( GLsizei n, GLuint *textures );
+    void deleteTextures( GLsizei n, const GLuint *textures );
 
-    virtual void viewport( int x, int y, int width, int height );
+    void texCoordPointer( GLint size, GLenum type, GLsizei stride,
+								  const GLvoid *pointer );
+    void texEnv(GLenum target, GLenum pname, const GLint *params);
+
+    void texImage2D ( GLenum target, GLint level, GLint internalformat,
+								GLsizei width, GLsizei height, GLint border,
+								GLenum format, GLenum type, const GLvoid *pixels );
+    void texParameter(GLenum target, GLenum pname, const GLint *params);
+
+    void viewport( int x, int y, int width, int height );
 
     virtual GLenum getError()
     {

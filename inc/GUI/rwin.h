@@ -4,7 +4,7 @@
 
 #include <string>
 
-#include "rglutils.h"
+#include "rguiutils.h"
 #include "revent.h"
 
 namespace rtv
@@ -32,13 +32,14 @@ public:
     void setPosition(int x, int y);
     void setSize(int w, int h);
 
-    RGLVector2Di size() const
+    RSizei size() const
     {
-        return RGLVector2Di(mWidth, mHeight);
+        return RSizei(mWidth, mHeight);
     }
-    RGLVector2Di position() const
+
+    RPositioni position() const
     {
-        return RGLVector2Di(mX, mY);
+        return RPositioni(mX, mY);
     }
 
     virtual void onCreate()

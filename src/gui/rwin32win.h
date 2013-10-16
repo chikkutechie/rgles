@@ -10,8 +10,8 @@
 
 #include <string>
 
-#include "rapp.h"
-#include "rwin.h"
+#include "GUI/rapp.h"
+#include "GUI/rwin.h"
 
 namespace rtv
 {
@@ -73,6 +73,9 @@ public:
             }
             
         }
+
+        show();
+
         return (mHandle != 0);
     }
 
@@ -103,7 +106,17 @@ public:
 
     void redraw()
     {
+        //TODO
+    }
 
+    void blit(int dx, int dy, int width, int height, unsigned char * data)
+    {
+        //TODO
+    }
+
+    void setTitle(std::string const & title)
+    {
+        //TODO
     }
 
 protected:

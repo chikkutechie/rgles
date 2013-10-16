@@ -12,7 +12,7 @@
 #  endif
 # endif
 
-# ifdef RGL_BUILDING_LIB
+# ifdef EGL_BUILDING_LIB
 #  define REGLAPI __declspec(dllexport)
 # else
 #  ifdef _DLL

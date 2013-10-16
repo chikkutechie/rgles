@@ -3,8 +3,10 @@
 
 #include "GUI/rapp.h"
 #include "GUI/rglwin.h"
+#include "GLES/gl.h"
 #include "EGL/egl.h"
 
+#include <math.h>
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))

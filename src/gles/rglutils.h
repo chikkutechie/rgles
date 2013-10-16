@@ -9,6 +9,12 @@
 
 #define GL_PI 3.141592653589f
 
+#define RGLASSERT(x) if (!(x)) { return; }
+#define RGLASSERT_WE(x, e) if (!(x)) { mState->mError = e; return; }
+
+#define RGLASSERT_RET(x, r) if (!(x)) { return r; }
+#define RGLASSERT_RET_WE(x, e, r) if (!(x)) { mState->mError = e; return r; }
+
 template <typename T>
 inline T clamp( T v, T min = 0, T max = 1 )
 {

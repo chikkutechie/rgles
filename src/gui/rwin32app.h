@@ -8,6 +8,8 @@
 #include <windowsx.h>
 #include <mmsystem.h>
 
+#include <iostream>
+
 namespace rtv
 {
 
@@ -15,15 +17,22 @@ LRESULT CALLBACK appfwWndProc( HWND hwnd, UINT msg,
                                WPARAM wParam, LPARAM lParam )
 {
     LRESULT result = 0;
+    EventData data;
+    std::cout << __FUNCTION__ << std::endl;
 
     switch (msg)
     {
+    case WM_SIZE:
+        data.mWidth = LOWORD(lParam);
+        data.mHeight = HIWORD(lParam);
+        break;
+
     case WM_CLOSE:
         DestroyWindow(hwnd);
         break;
 
     case WM_DESTROY:
-        PostQuitMessage(0);
+        PostQuitMessage(WM_QUIT);
         break;
 
     default:
@@ -89,11 +98,14 @@ public:
 
     EventData readEvent()
     {
-    	if (GetMessage(&mMessage, 0, 0, 0) > 0)
-    	{
-            TranslateMessage(&mMessage);
-            DispatchMessage(&mMessage);
-    	}
+        if (PeekMessage( &mMessage, NULL, 0, 0, PM_NOREMOVE ))
+        {
+    	    if (GetMessage(&mMessage, 0, 0, 0) > 0)
+    	    {
+                TranslateMessage(&mMessage);
+                DispatchMessage(&mMessage);
+    	    }
+        }
 
     	return EventData();
     }

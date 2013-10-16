@@ -12,6 +12,7 @@ enum EventType
 	RAPPFWEventButtonClick,
 	RAPPFWEventKeyPress,
 	RAPPFWEventDraw,
+    RAPPFWEventResize,
 	RAPPFWEXIT
 };
 
@@ -26,6 +27,8 @@ public:
 	char mKey;
 	int mX;
 	int mY;
+    int mWidth;
+    int mHeight;
 };
 
 }

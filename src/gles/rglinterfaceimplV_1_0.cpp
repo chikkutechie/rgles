@@ -467,11 +467,7 @@ void RGLInterfaceImplV_1_0::normal( GLfloat nx, GLfloat ny, GLfloat nz )
 
 void RGLInterfaceImplV_1_0::light( GLenum light, GLenum pname, const GLfloat *params )
 {
-    if ((light - GL_LIGHT0) >= GL_MAX_LIGHT_UNITS)
-    {
-        mState->mError = GL_INVALID_ENUM;
-        return;
-    }
+    RGLASSERT_WE((light - GL_LIGHT0) < GL_MAX_LIGHT_UNITS, GL_INVALID_ENUM);
 
     RGLInterfaceImplV_1_0Light & l = mState->mLights[light - GL_LIGHT0];
 
@@ -526,11 +522,7 @@ void RGLInterfaceImplV_1_0::light( GLenum light, GLenum pname, const GLfloat *pa
 
 void RGLInterfaceImplV_1_0::material( GLenum face, GLenum pname, const GLfloat *params )
 {
-    if (face != GL_FRONT_AND_BACK)
-    {
-        mState->mError = GL_INVALID_ENUM;
-        return;
-    }
+    RGLASSERT_WE(face == GL_FRONT_AND_BACK, GL_INVALID_VALUE);
 
     switch (pname)
     {
@@ -559,17 +551,9 @@ void RGLInterfaceImplV_1_0::material( GLenum face, GLenum pname, const GLfloat *
 void RGLInterfaceImplV_1_0::normalPointer( GLenum type, GLsizei stride,
                                            const GLvoid *pointer )
 {
-    if ( type != GL_FLOAT )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
+    RGLASSERT_WE(type == GL_FLOAT, GL_INVALID_VALUE);
+    RGLASSERT_WE(stride == 0, GL_INVALID_VALUE);
 
-    if ( stride != 0 )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
 
     mState->mNormalData.mSize = 3;
     mState->mNormalData.mType = type;
@@ -581,23 +565,9 @@ void RGLInterfaceImplV_1_0::colorPointer( GLint size, GLenum type,
         GLsizei stride,
         const GLvoid *pointer )
 {
-    if ( type != GL_FLOAT )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
-
-    if ( stride != 0 )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
-
-    if ( size != 4 )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
+    RGLASSERT_WE(size == 4, GL_INVALID_VALUE);
+    RGLASSERT_WE(type == GL_FLOAT, GL_INVALID_VALUE);
+    RGLASSERT_WE(stride == 0, GL_INVALID_VALUE);
 
     mState->mColorData.mSize = size;
     mState->mColorData.mType = type;
@@ -608,23 +578,9 @@ void RGLInterfaceImplV_1_0::colorPointer( GLint size, GLenum type,
 void RGLInterfaceImplV_1_0::vertexPointer( GLint size, GLenum type,
         GLsizei stride, const GLvoid *pointer )
 {
-    if ( type != GL_FLOAT )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
-
-    if ( stride != 0 )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
-
-    if ( size != 2 && size != 3 )
-    {
-        mState->mError = GL_INVALID_VALUE;
-        return;
-    }
+    RGLASSERT_WE(size == 2 || size == 3, GL_INVALID_VALUE);
+    RGLASSERT_WE(type == GL_FLOAT, GL_INVALID_VALUE);
+    RGLASSERT_WE(stride == 0, GL_INVALID_VALUE);
 
     mState->mVertexData.mSize = size;
     mState->mVertexData.mType = type;
@@ -1535,4 +1491,98 @@ int RGLInterfaceImplV_1_0::clipLine( RGLVectorf &p1, RGLVectorf &p2 )
     }
 
     return accept;
+}
+
+/* textures */
+void RGLInterfaceImplV_1_0::genTextures( GLsizei n, GLuint *textures )
+{
+    for (int i=0; i<n; ++i)
+    {
+        RGLInterfaceImplV_1_0Texture * tex = new RGLInterfaceImplV_1_0Texture();
+        textures[i] = mState->mTextures.size();
+        mState->mTextures.insert(std::make_pair(textures[i], tex));
+    }
+}
+
+void RGLInterfaceImplV_1_0::deleteTextures( GLsizei n, const GLuint *textures )
+{
+    for (int i=0; i<n; ++i)
+    {
+        TextureListIter iter = mState->mTextures.find(textures[i]);
+        if ( iter != mState->mTextures.end() )
+        {
+            delete iter->second;
+            mState->mTextures.erase(iter);
+        }
+    }
+}
+
+void RGLInterfaceImplV_1_0::bindTexture(GLenum target, GLuint texture)
+{
+    RGLASSERT_WE(target == GL_TEXTURE_2D, GL_INVALID_VALUE);
+
+    TextureListIter iter = mState->mTextures.find(texture);
+    if ( iter != mState->mTextures.end())
+    {
+        mState->mTextureUnits[mState->mCurrentActiveTexture].mBoundTexture = texture;
+    }
+    else
+    {
+        mState->mError = GL_INVALID_VALUE;
+    }
+}
+
+void RGLInterfaceImplV_1_0::texCoordPointer( GLint size, GLenum type, GLsizei stride,
+								const GLvoid *pointer )
+{
+    RGLASSERT_WE(size == 2, GL_INVALID_VALUE);
+    RGLASSERT_WE(type == GL_FLOAT, GL_INVALID_VALUE);
+    RGLASSERT_WE(stride == 0, GL_INVALID_VALUE);
+
+    mState->mTexCoordData.mSize = 2;
+    mState->mTexCoordData.mType = type;
+    mState->mTexCoordData.mStride = stride;
+    mState->mTexCoordData.mPointer = pointer;
+}
+
+void RGLInterfaceImplV_1_0::texEnv(GLenum target, GLenum pname, const GLint *params)
+{
+    RGLASSERT_WE(target == GL_TEXTURE_ENV, GL_INVALID_ENUM);
+    RGLASSERT_WE(pname == GL_TEXTURE_ENV_MODE, GL_INVALID_ENUM);
+
+    if (pname == GL_TEXTURE_ENV_MODE)
+    {
+        switch (*params)
+        {
+        case GL_REPLACE:
+            mState->mTextureUnits[mState->mCurrentActiveTexture].mMode = *params;
+            break;
+        case GL_MODULATE:
+            mState->mTextureUnits[mState->mCurrentActiveTexture].mMode = *params;
+            break;
+        default:
+            mState->mError = GL_INVALID_VALUE;
+            break;
+        }
+    }
+}
+
+void RGLInterfaceImplV_1_0::texImage2D ( GLenum target, GLint level, GLint internalformat,
+							GLsizei width, GLsizei height, GLint border,
+							GLenum format, GLenum type, const GLvoid *pixels )
+{
+    RGLASSERT_WE(target == GL_TEXTURE_2D, GL_INVALID_VALUE);
+    RGLASSERT_WE(level == 0, GL_INVALID_VALUE);
+    RGLASSERT_WE(border == 0, GL_INVALID_VALUE);
+    RGLASSERT_WE(type == GL_UNSIGNED_BYTE, GL_INVALID_ENUM);
+    RGLASSERT_WE(format == (GLenum)internalformat, GL_INVALID_VALUE);
+    RGLASSERT_WE(width > 0, GL_INVALID_VALUE);
+    RGLASSERT_WE(height > 0, GL_INVALID_VALUE);
+    RGLASSERT_WE((width & (width-1)) == 0, GL_INVALID_VALUE);
+    RGLASSERT_WE((height & (height-1)) == 0, GL_INVALID_VALUE);
+}
+
+void RGLInterfaceImplV_1_0::texParameter(GLenum target, GLenum pname, const GLint *params)
+{
+    RGLASSERT_WE(target == GL_TEXTURE_2D, GL_INVALID_VALUE);
 }

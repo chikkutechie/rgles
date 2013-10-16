@@ -184,54 +184,62 @@ GLAPI void GLAPIENTRY glLightfv (GLenum light, GLenum pname, const GLfloat *para
 
 GLAPI void GLAPIENTRY glMaterialf (GLenum face, GLenum pname, GLfloat param)
 {
+    RGLInterface::instance()->material(face, pname, &param);
 }
 
 GLAPI void GLAPIENTRY glMaterialfv (GLenum face, GLenum pname, const GLfloat *params)
 {
+    RGLInterface::instance()->material(face, pname, params);
 }
 
 /* textures */
 GLAPI void GLAPIENTRY glGenTextures (GLsizei n, GLuint *textures)
 {
+    RGLInterface::instance()->genTextures(n, textures);
 }
 
 GLAPI void GLAPIENTRY glDeleteTextures (GLsizei n, const GLuint *textures)
 {
+    RGLInterface::instance()->deleteTextures(n, textures);
 }
 
 GLAPI void GLAPIENTRY glTexCoordPointer (GLint size, GLenum type, GLsizei stride,
 								           const GLvoid *pointer)
 {
+    RGLInterface::instance()->texCoordPointer(size, type, stride, pointer);
 }
 
 GLAPI void GLAPIENTRY glTexEnvi (GLenum target, GLenum pname, GLint param)
 {
+    RGLInterface::instance()->texEnv(target, pname, &param);
 }
 
 GLAPI void GLAPIENTRY glTexEnviv (GLenum target, GLenum pname, const GLint *params)
 {
+    RGLInterface::instance()->texEnv(target, pname, params);
 }
 
-GLAPI void GLAPIENTRY glTexImage2D (GLenum target, GLint level, GLint internalformat,
-									  GLsizei width, GLsizei height, GLint border,
-									  GLenum format, GLenum type, const GLvoid *pixels)
+GLAPI void GLAPIENTRY glTexImage2D ( GLenum target, GLint level, GLint internalformat,
+									 GLsizei width, GLsizei height, GLint border,
+									 GLenum format, GLenum type, const GLvoid *pixels )
 {
+    RGLInterface::instance()->texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 }
 
 GLAPI void GLAPIENTRY glTexParameteri (GLenum target, GLenum pname, GLint param)
 {
+    RGLInterface::instance()->texParameter(target, pname, &param);
 }
 
 GLAPI void GLAPIENTRY glTexParameteriv (GLenum target, GLenum pname, const GLint *params)
 {
+    RGLInterface::instance()->texParameter(target, pname, params);
 }
 
-GLAPI void GLAPIENTRY glTexSubImage2D (GLenum target, GLint level, GLint xoffset,
-										 GLint yoffset, GLsizei width, GLsizei height,
-										 GLenum format, GLenum type, const GLvoid *pixels)
+GLAPI void GLAPIENTRY glBindTexture (GLenum target, GLuint texture)
 {
+    RGLInterface::instance()->bindTexture(target, texture);
 }
-
 
 #ifdef __cplusplus
 }

@@ -11,16 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\inc\rapp.h" />
-    <ClInclude Include="..\..\inc\rwin.h" />
-    <ClInclude Include="..\..\src\appfw\rwin32app.h" />
-    <ClInclude Include="..\..\src\appfw\rwin32win.h" />
-    <ClInclude Include="..\..\src\appfw\rx11app.h" />
-    <ClInclude Include="..\..\src\appfw\rx11win.h" />
+    <ClCompile Include="..\..\src\gui\rapp.cpp" />
+    <ClCompile Include="..\..\src\gui\rglwin.cpp" />
+    <ClCompile Include="..\..\src\gui\rtime.cpp" />
+    <ClCompile Include="..\..\src\gui\rwin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\appfw\rapp.cpp" />
-    <ClCompile Include="..\..\src\appfw\rwin.cpp" />
+    <ClInclude Include="..\..\inc\GUI\rapp.h" />
+    <ClInclude Include="..\..\inc\GUI\revent.h" />
+    <ClInclude Include="..\..\inc\GUI\rglwin.h" />
+    <ClInclude Include="..\..\inc\GUI\rtime.h" />
+    <ClInclude Include="..\..\inc\GUI\rtimer.h" />
+    <ClInclude Include="..\..\inc\GUI\rwin.h" />
+    <ClInclude Include="..\..\src\gui\rwin32app.h" />
+    <ClInclude Include="..\..\src\gui\rwin32win.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{874E1A97-10C6-4B39-AEA1-3140C0A34BBC}</ProjectGuid>
@@ -57,7 +61,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\inc;..\..\src\appfw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;..\..\inc;..\..\src\gui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
