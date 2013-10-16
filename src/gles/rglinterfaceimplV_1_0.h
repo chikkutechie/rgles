@@ -241,7 +241,8 @@ public:
         : mCount( 0 ),
           mPoints( 0 ),
           mColors( 0 ),
-          mNormals( 0 )
+          mNormals( 0 ),
+          mTexCoords( 0 )
     {}
 
     GLint mMode;
@@ -249,6 +250,7 @@ public:
     RGLVectorf *mPoints;
     RGLColorf *mColors;
     RGLVectorf *mNormals;
+    RGLVectorf *mTexCoords;
 };
 
 class RGLInterfaceImplV_1_0Fragments

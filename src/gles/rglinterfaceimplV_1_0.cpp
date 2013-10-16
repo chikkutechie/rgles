@@ -295,6 +295,10 @@ void RGLInterfaceImplV_1_0::enable( GLenum cap )
 {
     switch ( cap )
     {
+    	case GL_TEXTURE_2D:
+    		mState->mFeature.mTexture2D = true;
+    		break;
+
         case GL_COLOR_MATERIAL:
             mState->mFeature.mColorMaterial = true;
             break;
@@ -333,7 +337,11 @@ void RGLInterfaceImplV_1_0::disable( GLenum cap )
 {
     switch ( cap )
     {
-        case GL_COLOR_MATERIAL:
+    	case GL_TEXTURE_2D:
+    		mState->mFeature.mTexture2D = false;
+    		break;
+
+    	case GL_COLOR_MATERIAL:
             mState->mFeature.mColorMaterial = false;
             break;
 
@@ -670,12 +678,22 @@ void RGLInterfaceImplV_1_0::drawArrays( GLenum mode, GLint first,
     RGLInterfaceImplV_1_0Primitive primitive;
     RGLColorf *colors = 0;
     RGLVectorf *normals = 0;
+    RGLVectorf *texcoords = 0;
     RGLVectorf *points = readVertexData( mState->mVertexData.mPointer,
                                          mState->mVertexData.mSize,
                                          mState->mVertexData.mType,
                                          first, count );
 
-    if ( mState->mFeature.mColorArray &&
+    if ( mState->mFeature.mTexCoordArray &&
+         mState->mTexCoordData.mPointer )
+    {
+    	texcoords = ( RGLColorf * ) readVertexData( mState->mTexCoordData.mPointer,
+    	                 mState->mTexCoordData.mSize,
+    	                 mState->mTexCoordData.mType,
+    	                 first, count );
+    }
+
+	if ( mState->mFeature.mColorArray &&
          mState->mColorData.mPointer )
     {
         colors = ( RGLColorf * ) readVertexData( mState->mColorData.mPointer,
@@ -699,12 +717,14 @@ void RGLInterfaceImplV_1_0::drawArrays( GLenum mode, GLint first,
     primitive.mPoints = points;
     primitive.mColors = colors;
     primitive.mNormals = normals;
+    primitive.mTexCoords = texcoords;
 
     perVertexOperations( &primitive );
 
     delete [] points;
     delete [] colors;
     delete [] normals;
+    delete [] texcoords;
 }
 
 /* clear operations */
@@ -823,6 +843,7 @@ void RGLInterfaceImplV_1_0::drawLine( RGLInterfaceImplV_1_0Fragments
     }
 }
 
+/* This one of the most worst way to render triangle, but performance is not our aim */
 void RGLInterfaceImplV_1_0::drawTriangle( RGLInterfaceImplV_1_0Fragments
         &fragments,
         RGLInterfaceImplV_1_0Primitive const & primitive )
