@@ -29,20 +29,28 @@ class RGLInterfaceImplV_1_0Texture
 {
 public:
     RGLInterfaceImplV_1_0Texture()
-     : target(GL_TEXTURE_2D),
-       level(0),
-       pixels(0)
+     : mTarget(GL_TEXTURE_2D),
+       mLevel(0),
+       mPixels(0),
+       mWrapS(GL_CLAMP),
+       mWrapT(GL_CLAMP),
+       mMinification(GL_NEAREST),
+       mMagnification(GL_NEAREST)
     {}
 
-    GLenum target;
-    GLint level;
-    GLint internalformat;
-    GLsizei width;
-    GLsizei height;
-    GLint border;
-    GLenum format;
-    GLenum type;
-    GLvoid *pixels;
+    GLenum mTarget;
+    GLint mLevel;
+    GLint mInternalformat;
+    GLsizei mWidth;
+    GLsizei mHeight;
+    GLint mBorder;
+    GLenum mFormat;
+    GLenum mType;
+    GLubyte *mPixels;
+    GLint mWrapS;
+    GLint mWrapT;
+    GLint mMinification;
+    GLint mMagnification;
 };
 
 typedef std::map<GLuint, RGLInterfaceImplV_1_0Texture*> TextureList;

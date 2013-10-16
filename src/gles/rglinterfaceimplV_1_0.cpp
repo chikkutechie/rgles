@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <string.h>
 
 RGLInterface * RGLInterface::mAPI = 0;
 
@@ -1576,13 +1577,71 @@ void RGLInterfaceImplV_1_0::texImage2D ( GLenum target, GLint level, GLint inter
     RGLASSERT_WE(border == 0, GL_INVALID_VALUE);
     RGLASSERT_WE(type == GL_UNSIGNED_BYTE, GL_INVALID_ENUM);
     RGLASSERT_WE(format == (GLenum)internalformat, GL_INVALID_VALUE);
+    RGLASSERT_WE(format == GL_RGBA, GL_INVALID_VALUE);
     RGLASSERT_WE(width > 0, GL_INVALID_VALUE);
     RGLASSERT_WE(height > 0, GL_INVALID_VALUE);
     RGLASSERT_WE((width & (width-1)) == 0, GL_INVALID_VALUE);
     RGLASSERT_WE((height & (height-1)) == 0, GL_INVALID_VALUE);
+
+    TextureListIter iter = mState->mTextures.find(mState->mTextureUnits[mState->mCurrentActiveTexture].mBoundTexture);
+    if ( iter != mState->mTextures.end() )
+    {
+    	iter->second->mTarget = target;
+    	iter->second->mLevel = level;
+    	iter->second->mInternalformat = internalformat;
+    	iter->second->mWidth = width;
+    	iter->second->mHeight = height;
+    	iter->second->mBorder = border;
+    	iter->second->mFormat = format;
+    	iter->second->mType = type;
+
+    	delete [] iter->second->mPixels;
+    	iter->second->mPixels = 0;
+
+    	switch (format)
+    	{
+    	case GL_RGBA:
+    		{
+    	    const int size = 4 * width * height;
+    		iter->second->mPixels = new GLubyte[size];
+    		memcpy(iter->second->mPixels, pixels, size);
+    		}
+    		break;
+
+    	default:
+    		{
+    		mState->mError = GL_INVALID_ENUM;
+    		}
+    		break;
+    	}
+    }
 }
 
 void RGLInterfaceImplV_1_0::texParameter(GLenum target, GLenum pname, const GLint *params)
 {
     RGLASSERT_WE(target == GL_TEXTURE_2D, GL_INVALID_VALUE);
+
+    TextureListIter iter = mState->mTextures.find(mState->mTextureUnits[mState->mCurrentActiveTexture].mBoundTexture);
+    if ( iter != mState->mTextures.end() )
+    {
+    	RGLInterfaceImplV_1_0Texture * texture = iter->second;
+    	switch (pname)
+    	{
+    	case GL_TEXTURE_WRAP_S:
+    		texture->mWrapS = *params;
+    		break;
+
+    	case GL_TEXTURE_WRAP_T:
+    		texture->mWrapT = *params;
+    		break;
+
+    	case GL_TEXTURE_MAG_FILTER:
+    		texture->mMagnification = *params;
+    		break;
+
+    	case GL_TEXTURE_MIN_FILTER:
+    		texture->mMinification = *params;
+    		break;
+    	}
+	}
 }
