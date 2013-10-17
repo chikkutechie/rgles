@@ -247,7 +247,7 @@ REGLAPI EGLBoolean REGLAPIENTRY eglMakeCurrent(EGLDisplay dpy, EGLSurface draw,
 
 	RGLInterface::InitParam param;
 	param.mHasDepth = true;
-	param.mHeight = surface->mWidth;
+	param.mWidth = surface->mWidth;
 	param.mHeight = surface->mHeight;
 
 	context->mAPI.initialize(param, (void *)&(context->mGLState));
@@ -271,8 +271,14 @@ REGLAPI EGLBoolean REGLAPIENTRY eglSwapBuffers(EGLDisplay dpy, EGLSurface surfac
 
     GLubyte *buffer = new GLubyte[eglSurface->mWidth * eglSurface->mHeight * 4];
 
+    bool inverted = true;
+
+#ifdef _WIN32
+    inverted = false;
+#endif
+
 	context->mAPI.readPixels( 0, 0, eglSurface->mWidth, eglSurface->mHeight,
-                              GL_RGBA, GL_UNSIGNED_BYTE, buffer, true );
+                              GL_RGBA, GL_UNSIGNED_BYTE, buffer, inverted );
 
     eglSurface->mWindow->blit( 0, 0,
     						   eglSurface->mWidth, eglSurface->mHeight,

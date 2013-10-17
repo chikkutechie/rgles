@@ -13,7 +13,7 @@ enum EventType
 	RAPPFWEventKeyPress,
 	RAPPFWEventDraw,
     RAPPFWEventResize,
-	RAPPFWEXIT
+	RAPPFWEventExit
 };
 
 class EventData

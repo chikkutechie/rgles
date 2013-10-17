@@ -23,18 +23,30 @@ public:
 
     virtual ~RAppImpl()
     {
-    	XCloseDisplay(mDisplay);
+		if (mDisplay)
+		{
+			XCloseDisplay(mDisplay);
+		}
     }
 
     virtual bool init()
     {
-        mDisplay = XOpenDisplay( 0 );
+		if (!mDisplay)
+		{
+			mDisplay = XOpenDisplay( 0 );
+		}
         return mDisplay != 0;
     }
 
     EventData readEvent()
     {
     	EventData appEve;
+		
+		if (!mDisplay)
+		{
+			return appEve;
+		}
+		
         XEvent event;
         KeySym key;
         char text[255];

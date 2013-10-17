@@ -55,7 +55,7 @@ public:
 
     virtual bool create()
     {
-    	bool result = true;
+    	bool result = false;
     	unsigned long black;
     	unsigned long white;
     	int n;
@@ -65,43 +65,48 @@ public:
     	XSetWindowAttributes swa;
     	XEvent event;
         Display * dis = (Display *)mApp->handle();
+		if (dis)
+		{
+			mScreen = XDefaultScreen(dis);
 
-    	mScreen = XDefaultScreen(dis);
+			black = XBlackPixel(dis,mScreen),
+			white = XWhitePixel(dis, mScreen);
 
-    	black = XBlackPixel(dis,mScreen),
-    	white = XWhitePixel(dis, mScreen);
+			XMatchVisualInfo (dis, mScreen, 32, TrueColor, &vinfo);
 
-    	XMatchVisualInfo (dis, mScreen, 32, TrueColor, &vinfo);
+			vi = XGetVisualInfo(dis, VisualAllMask, &vinfo, &n);
+			if (vi)
+			{
+				cmap = XCreateColormap( dis, RootWindow(dis, vi->screen),
+										vi->visual, AllocNone );
 
-    	vi = XGetVisualInfo(dis, VisualAllMask, &vinfo, &n);
-    	cmap = XCreateColormap( dis, RootWindow(dis, vi->screen),
-    	             	 	    vi->visual, AllocNone );
+				swa.colormap = cmap;
+				swa.border_pixel = 0;
+				swa.event_mask = StructureNotifyMask;
 
-    	swa.colormap = cmap;
-    	swa.border_pixel = 0;
-    	swa.event_mask = StructureNotifyMask;
+				mHandle = XCreateWindow( dis, RootWindow(dis, vi->screen), 0, 0, mWidth, mHeight,
+										 0, vi->depth, InputOutput, vi->visual,
+										 CWBorderPixel|CWColormap|CWEventMask, &swa );
+				if (mHandle)
+				{
+					XSetStandardProperties(dis, mHandle, mTitle.c_str(), mTitle.c_str(), None, NULL, 0, 0);
 
-    	mHandle = XCreateWindow( dis, RootWindow(dis, vi->screen), 0, 0, mWidth, mHeight,
-                                 0, vi->depth, InputOutput, vi->visual,
-                                 CWBorderPixel|CWColormap|CWEventMask, &swa );
+					XSelectInput(dis, mHandle, ExposureMask | ButtonPressMask | KeyPressMask | StructureNotifyMask);
 
+					mGC = XCreateGC(dis, mHandle, 0,0);
 
+					XSetForeground(dis, mGC, white);
+					XSetBackground(dis, mGC, black);
+					XClearWindow(dis, mHandle);
 
-    	XSetStandardProperties(dis, mHandle, mTitle.c_str(), mTitle.c_str(), None, NULL, 0, 0);
+					XMapWindow(dis, mHandle);
+					XIfEvent(dis, &event, WaitForNotify, (char*)mHandle);
 
-    	XSelectInput(dis, mHandle, ExposureMask | ButtonPressMask | KeyPressMask | StructureNotifyMask);
-
-    	mGC = XCreateGC(dis, mHandle, 0,0);
-
-    	XSetForeground(dis, mGC, white);
-    	XSetBackground(dis, mGC, black);
-    	XClearWindow(dis, mHandle);
-
-    	XMapWindow(dis, mHandle);
-    	XIfEvent(dis, &event, WaitForNotify, (char*)mHandle);
-
-		mWin->onCreate();
-
+					result = true;
+					mWin->onCreate();
+				}
+			}
+		}
         return result;
     }
 
@@ -112,6 +117,21 @@ public:
 
     void show()
     {
+    }
+
+    std::string title() const
+    {
+    	return mTitle;
+    }
+
+    RSizei size() const
+    {
+        return RSizei(mWidth, mHeight);
+    }
+
+    RPositioni position() const
+    {
+        return RPositioni(mX, mY);
     }
 
     void setPosition(int x, int y)

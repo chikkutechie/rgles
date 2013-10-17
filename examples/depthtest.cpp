@@ -13,6 +13,12 @@
 class MyWindow: public rtv::RGLWin
 {
 public:
+    MyWindow()
+    {
+        setSize(480, 640);
+        setTitle("depth test");
+    }
+
 	void draw()
 	{
 		GLfloat rectangle1[] =

@@ -32,34 +32,19 @@ public:
     void setPosition(int x, int y);
     void setSize(int w, int h);
 
-    RSizei size() const
-    {
-        return RSizei(mWidth, mHeight);
-    }
+    RSizei size() const;
 
-    RPositioni position() const
-    {
-        return RPositioni(mX, mY);
-    }
+    RPositioni position() const;
 
     virtual void onCreate()
     {}
 
-    std::string title() const
-    {
-    	return mTitle;
-    }
-
+    std::string title() const;
     void setTitle(std::string const & title);
 
 protected:
     RWinImpl * mImpl;
     RApp *mApp;
-    std::string mTitle;
-    int mX;
-    int mY;
-    int mWidth;
-    int mHeight;
 };
 
 }

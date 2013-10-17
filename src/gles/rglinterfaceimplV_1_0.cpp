@@ -434,7 +434,7 @@ void RGLInterfaceImplV_1_0::readPixels( GLint x, GLint y, GLsizei width,
     	{
     		if (originTopLeft)
     		{
-    			readIndex = (((width-i) * width) + j);
+    			readIndex = (((height-1-i) * width) + j);
     		}
     		else
     		{

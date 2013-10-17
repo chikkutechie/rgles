@@ -13,11 +13,7 @@ namespace rtv
 {
 
 RWin::RWin()
- : mImpl(0),
-   mX(100),
-   mY(100),
-   mWidth(256),
-   mHeight(256)
+ : mImpl(0)
 {
     mImpl = new RWinImpl(0, this);
 }
@@ -58,6 +54,21 @@ void RWin::flush()
     mImpl->flush();
 }
 
+std::string RWin::title() const
+{
+    return mImpl->title();
+}
+
+RSizei RWin::size() const
+{
+    return mImpl->size();
+}
+
+RPositioni RWin::position() const
+{
+    return mImpl->position();
+}
+
 void RWin::setPosition(int x, int y)
 {
     mImpl->setPosition(x, y);
@@ -75,7 +86,6 @@ void RWin::blit(int x, int y, int width, int height, unsigned char * data)
 
 void RWin::setTitle(std::string const & title)
 {
-	mTitle = title;
 	mImpl->setTitle(title);
 }
 

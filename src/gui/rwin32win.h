@@ -22,7 +22,7 @@ public:
      : mApp(app),
        mWin(win),
        mHandle(0),
-       mTitle("RAPPFW"),
+       mTitle("App"),
        mX(100),
        mY(100),
        mWidth(256),
@@ -51,12 +51,10 @@ public:
             atom = GetClassInfo( (HINSTANCE)mApp->handle(), TEXT("RAPPFW"), &wc );
             if( atom != 0 )
             {
-                flags = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-                flags |= WS_OVERLAPPEDWINDOW;
+                flags = WS_OVERLAPPEDWINDOW;
 
-                mHandle = CreateWindowEx( 0,
-                            TEXT("RAPPFW"),
-                            (LPCWSTR)mTitle.c_str(),
+                mHandle = CreateWindow( TEXT("RAPPFW"),
+                            mTitle.c_str(),
                             flags,
                             mX, mY,
                             mWidth, mHeight,
@@ -66,15 +64,18 @@ public:
                             0);
                 if (mHandle == 0)
                 {
-                    MessageBox(0, (LPCWSTR)"Window Creation Failed",
-                          (LPCWSTR)"Error",
+                    MessageBox(0, TEXT("Window Creation Failed"),
+                          TEXT("Error"),
                           MB_ICONEXCLAMATION | MB_OK);
+                }
+                else
+                {
+                    show();
+                    mWin->onCreate();
                 }
             }
             
         }
-
-        show();
 
         return (mHandle != 0);
     }
@@ -89,34 +90,110 @@ public:
         }
     }
 
+    virtual void hide()
+    {
+        if (mHandle)
+        {
+            ShowWindow(mHandle, SW_HIDE);
+            UpdateWindow(mHandle);
+        }
+    }
+
     void flush()
     {}
+
+    std::string title() const
+    {
+    	return mTitle;
+    }
+
+    RSizei size() const
+    {
+        return RSizei(mWidth, mHeight);
+    }
+
+    RPositioni position() const
+    {
+        return RPositioni(mX, mY);
+    }
 
     void setPosition(int x, int y)
     {
         mX = x;
         mY = y;
+        if (mHandle)
+        {
+            SetWindowPos( mHandle, 0, mX, mY,
+                          mWidth, mHeight,
+                          SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
+        }
     }
 
     void setSize(int w, int h)
     {
         mWidth = w;
         mHeight = h;
+        if (mHandle)
+        {
+            SetWindowPos( mHandle, 0,
+                          mX, mY, w, h,
+                          SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE );
+        }
     }
 
     void redraw()
     {
-        //TODO
+        if (mHandle)
+        {
+            InvalidateRect(mHandle, 0, FALSE);
+        }
     }
 
     void blit(int dx, int dy, int width, int height, unsigned char * data)
     {
-        //TODO
+        if (mHandle)
+        {
+            HDC hDC = GetDC(0);
+            HDC cDC = CreateCompatibleDC(hDC);
+            HBITMAP hBmp = CreateCompatibleBitmap(hDC, width, height);
+
+            BITMAPINFO info;
+
+            ZeroMemory(&info, sizeof(info));
+
+            info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+
+            info.bmiHeader.biPlanes = 1;
+            info.bmiHeader.biBitCount = 32;
+            info.bmiHeader.biCompression = 0;
+            info.bmiHeader.biHeight = height;
+            info.bmiHeader.biWidth = width;
+            info.bmiHeader.biSizeImage = width * height * 4;
+            info.bmiHeader.biClrUsed = 256;
+            SelectObject(cDC, hBmp);
+            SetDIBits(cDC, hBmp, 0, height, data, &info, DIB_RGB_COLORS);
+
+	        HDC whdc;
+
+            whdc = GetDC(mHandle);
+            BitBlt(whdc, 0, 0, width, height, cDC, 0, 0, SRCCOPY);
+            ReleaseDC(mHandle, whdc);
+
+            DeleteBitmap(hBmp);
+
+            DeleteDC(cDC);
+
+            ReleaseDC(0, hDC);
+        }
     }
 
     void setTitle(std::string const & title)
     {
-        //TODO
+        mTitle = title;
+        if (mHandle)
+        {
+            SetWindowText(mHandle, title.c_str());
+        }
     }
 
 protected:

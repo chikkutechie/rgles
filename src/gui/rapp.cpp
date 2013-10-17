@@ -62,7 +62,7 @@ void RApp::exec()
     		}
     		break;
 
-    	case RAPPFWEXIT:
+        case RAPPFWEventExit:
     		mFinished = true;
     		break;
 
