@@ -416,6 +416,7 @@ void RGLInterfaceImplV_1_0::readPixels( GLint x, GLint y, GLsizei width,
     GLint colorCount = 0;
     int readIndex;
     int writeIndex;
+    int newJ;
 
     switch ( format )
     {
@@ -432,15 +433,14 @@ void RGLInterfaceImplV_1_0::readPixels( GLint x, GLint y, GLsizei width,
     {
     	for (int j=y; j<height; ++j)
     	{
+            newJ = j;
+            writeIndex = ((i) + j * width) * colorCount;
     		if (originTopLeft)
     		{
-    			readIndex = (((height-1-i) * width) + j);
+    			newJ = (height-1) - (j-y);
     		}
-    		else
-    		{
-    			readIndex = ((i * width) + j);
-    		}
-    	    writeIndex = ((i * width) + j) * colorCount;
+    		
+            readIndex = i + (newJ * width);
 
 			for ( GLint k = 0; k < colorCount; ++k )
 			{
@@ -555,6 +555,20 @@ void RGLInterfaceImplV_1_0::material( GLenum face, GLenum pname, const GLfloat *
         mState->mError = GL_INVALID_ENUM;
         break;
     }
+}
+
+
+void RGLInterfaceImplV_1_0::texCoordPointer( GLint size, GLenum type, GLsizei stride,
+								const GLvoid *pointer )
+{
+    RGLASSERT_WE(size == 2, GL_INVALID_VALUE);
+    RGLASSERT_WE(type == GL_FLOAT, GL_INVALID_VALUE);
+    RGLASSERT_WE(stride == 0, GL_INVALID_VALUE);
+
+    mState->mTexCoordData.mSize = size;
+    mState->mTexCoordData.mType = type;
+    mState->mTexCoordData.mStride = stride;
+    mState->mTexCoordData.mPointer = pointer;
 }
 
 void RGLInterfaceImplV_1_0::normalPointer( GLenum type, GLsizei stride,
@@ -1554,19 +1568,6 @@ void RGLInterfaceImplV_1_0::bindTexture(GLenum target, GLuint texture)
     }
 }
 
-void RGLInterfaceImplV_1_0::texCoordPointer( GLint size, GLenum type, GLsizei stride,
-								const GLvoid *pointer )
-{
-    RGLASSERT_WE(size == 2, GL_INVALID_VALUE);
-    RGLASSERT_WE(type == GL_FLOAT, GL_INVALID_VALUE);
-    RGLASSERT_WE(stride == 0, GL_INVALID_VALUE);
-
-    mState->mTexCoordData.mSize = 2;
-    mState->mTexCoordData.mType = type;
-    mState->mTexCoordData.mStride = stride;
-    mState->mTexCoordData.mPointer = pointer;
-}
-
 void RGLInterfaceImplV_1_0::texEnv(GLenum target, GLenum pname, const GLint *params)
 {
     RGLASSERT_WE(target == GL_TEXTURE_ENV, GL_INVALID_ENUM);
@@ -1665,4 +1666,64 @@ void RGLInterfaceImplV_1_0::texParameter(GLenum target, GLenum pname, const GLin
     		break;
     	}
 	}
+}
+
+void RGLInterfaceImplV_1_0::nearestFilter( RGLInterfaceImplV_1_0Texture * texture,
+										   GLfloat s, GLfloat t, RGLColorf & result )
+{
+	s *= texture->mWidth;
+	t *= texture->mHeight;
+
+	GLint row = (GLint) t;
+	GLint col = (GLint) s;
+
+	GLint w2 = texture->mWidth;
+	GLint h2 = texture->mHeight;
+
+    /* Find texel column address */
+	if (texture->mWrapS == GL_REPEAT)
+	{
+		col &= w2-1;
+	}
+	else
+	{
+		if (col < 0)
+		{
+			col = 0;
+		}
+		else if (col >= w2)
+		{
+			col = w2 - 1;
+		}
+	}
+
+    /* Find texel row address */
+	if (texture->mWrapT == GL_REPEAT)
+	{
+		row &= h2-1;
+	}
+	else
+	{
+		if (row < 0)
+		{
+			row = 0;
+		}
+		else if (row >= h2)
+		{
+			row = h2 - 1;
+		}
+	}
+
+	extractRGBA(texture, row, col, result);
+}
+
+void RGLInterfaceImplV_1_0::extractRGBA(RGLInterfaceImplV_1_0Texture * texture,
+		   GLint row, GLint col, RGLColorf & result)
+{
+	GLint index = (row * texture->mWidth + col ) * 4;
+
+	result.setR(texture->mPixels[index + 0] / 255.0f);
+	result.setG(texture->mPixels[index + 1] / 255.0f);
+	result.setB(texture->mPixels[index + 2] / 255.0f);
+	result.setA(texture->mPixels[index + 3] / 255.0f);
 }

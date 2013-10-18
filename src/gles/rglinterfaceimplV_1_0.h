@@ -431,7 +431,10 @@ protected:
     int clipLine( RGLVectorf &p1, RGLVectorf &p2 );
 
     bool depthTest( const RGLInterfaceImplV_1_0Fragments::Fragment &fragment );
-
+    void nearestFilter( RGLInterfaceImplV_1_0Texture * texture,
+    			        GLfloat s, GLfloat t, RGLColorf & result );
+    void extractRGBA( RGLInterfaceImplV_1_0Texture * texture,
+    		          GLint row, GLint col, RGLColorf & result );
 protected:
     RGLInterfaceImplV_1_0State * mState;
 };

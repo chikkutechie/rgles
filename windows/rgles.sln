@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rgles", "rgles\rgles.vcxproj", "{F9A0612B-714D-4FC6-96C2-C6597CC82086}"
+	ProjectSection(ProjectDependencies) = postProject
+		{874E1A97-10C6-4B39-AEA1-3140C0A34BBC} = {874E1A97-10C6-4B39-AEA1-3140C0A34BBC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "transformations", "transformations\transformations.vcxproj", "{E9230833-AC6B-4092-B601-6926E40E12ED}"
 	ProjectSection(ProjectDependencies) = postProject

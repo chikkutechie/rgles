@@ -15,7 +15,7 @@ class MyWindow: public rtv::RGLWin
 public:
     MyWindow()
     {
-        setSize(480, 640);
+        setSize(128, 256);
         setTitle("depth test");
     }
 
@@ -59,7 +59,6 @@ public:
 		{
 			std::cerr << "Error Occured : " << error << std::endl;
 		}
-
 	}
 };
 

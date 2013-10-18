@@ -13,6 +13,12 @@
 class MyWindow: public rtv::RGLWin
 {
 public:
+    MyWindow()
+    {
+        setSize(480, 256);
+        setTitle("depth test");
+    }
+
 	virtual void draw()
 	{
 		glClearColor( 0.0f, 0.0f, 0.0f, 1.0f);

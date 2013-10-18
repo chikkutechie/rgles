@@ -33,10 +33,30 @@ bool RApp::init()
 
 void RApp::exec()
 {
-    if (mMainWindow)
+    if (mImpl->init())
     {
-        mMainWindow->create();
-        mMainWindow->show();
+        if (mMainWindow)
+        {
+            if (!mMainWindow->create())
+            {
+                std::cerr << "Main window creation failed" << std::endl;
+                mFinished = true;
+            }
+            else
+            {
+                mMainWindow->show();
+            }
+        }
+        else
+        {
+            std::cerr << "Main window not set" << std::endl;
+            mFinished = true;
+        }
+    }
+    else
+    {
+        std::cerr << "Application initialization failed" << std::endl;
+        mFinished = true;
     }
 
     while (!mFinished)

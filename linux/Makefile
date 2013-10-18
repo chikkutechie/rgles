@@ -56,10 +56,10 @@ librgl.a : $(librgl_a_OBJS)
 librgui.a : $(librgui_a_OBJS)
 	ar -cvq $@ $(librgui_a_OBJS)
 	
-primitives : $(primitives_SOURCES)
+primitives : $(primitives_SOURCES) $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
-transformations : $(transformations_SOURCES)
+transformations : $(transformations_SOURCES) $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
 regl.o : ../src/egl/regl.cpp
@@ -87,16 +87,16 @@ rwin.o : ../src/gui/rwin.cpp
 rglwin.o : ../src/gui/rglwin.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $<
 	
-guitest :	$(guitest_SOURCES) $(lib_PROGRAMS)
+guitest :	$(guitest_SOURCES) $(lib_PROGRAMS) $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
-colors: $(colors_SOURCES)
+colors: $(colors_SOURCES) $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
-depthtest: $(depthtest_SOURCES)
+depthtest: $(depthtest_SOURCES) $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
-lighting: $(lighting_SOURCES) 
+lighting: $(lighting_SOURCES)  $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
 clean:
