@@ -19,81 +19,69 @@ class RWinImpl
 {
 public:
     RWinImpl(RApp *app, RWin * win)
-     : mApp(app),
-       mWin(win),
-       mHandle(0),
-       mTitle("App"),
-       mX(100),
-       mY(100),
-       mWidth(256),
-       mHeight(256)
+        : mApp(app),
+          mWin(win),
+          mHandle(0),
+          mTitle("App"),
+          mX(100),
+          mY(100),
+          mWidth(256),
+          mHeight(256)
     {}
 
-    void setApp(RApp *app)
-    {
+    void setApp(RApp *app) {
         mApp = app;
     }
 
-    void setWin(RWin *w)
-    {
+    void setWin(RWin *w) {
         mWin = w;
     }
 
-    virtual bool create()
-    {
-        if (!mHandle)
-        {
+    virtual bool create() {
+        if (!mHandle) {
             WNDCLASS wc;
             ATOM atom;
             DWORD flags   = 0;
             DWORD exFlags = 0;
 
-            atom = GetClassInfo( (HINSTANCE)mApp->handle(), TEXT("RAPPFW"), &wc );
-            if( atom != 0 )
-            {
+            atom = GetClassInfo((HINSTANCE)mApp->handle(), TEXT("RAPPFW"), &wc);
+            if (atom != 0) {
                 flags = WS_OVERLAPPEDWINDOW;
 
-                mHandle = CreateWindow( TEXT("RAPPFW"),
-                            mTitle.c_str(),
-                            flags,
-                            mX, mY,
-                            mWidth, mHeight,
-                            0,
-                            (HMENU) NULL,
-                            (HINSTANCE)mApp->handle(),
-                            0);
-                if (mHandle == 0)
-                {
+                mHandle = CreateWindow(TEXT("RAPPFW"),
+                                       mTitle.c_str(),
+                                       flags,
+                                       mX, mY,
+                                       mWidth, mHeight,
+                                       0,
+                                       (HMENU) NULL,
+                                       (HINSTANCE)mApp->handle(),
+                                       0);
+                if (mHandle == 0) {
                     MessageBox(0, TEXT("Window Creation Failed"),
-                          TEXT("Error"),
-                          MB_ICONEXCLAMATION | MB_OK);
-                }
-                else
-                {
+                               TEXT("Error"),
+                               MB_ICONEXCLAMATION | MB_OK);
+                } else {
                     show();
                     mWin->onCreate();
                 }
             }
-            
+
         }
 
         return (mHandle != 0);
     }
 
-    virtual void show()
-    {
-        if (mHandle)
-        {
+    virtual void show() {
+        if (mHandle) {
             ShowWindow(mHandle, SW_SHOW);
             UpdateWindow(mHandle);
-            ShowCursor( TRUE );
+            ShowCursor(TRUE);
         }
     }
 
-    virtual void hide()
-    {
-        if (mHandle)
-        {
+    virtual void hide() {
+        if (mHandle) {
             ShowWindow(mHandle, SW_HIDE);
             UpdateWindow(mHandle);
         }
@@ -102,57 +90,46 @@ public:
     void flush()
     {}
 
-    std::string title() const
-    {
-    	return mTitle;
+    std::string title() const {
+        return mTitle;
     }
 
-    RSizei size() const
-    {
+    RSizei size() const {
         return RSizei(mWidth, mHeight);
     }
 
-    RPositioni position() const
-    {
+    RPositioni position() const {
         return RPositioni(mX, mY);
     }
 
-    void setPosition(int x, int y)
-    {
+    void setPosition(int x, int y) {
         mX = x;
         mY = y;
-        if (mHandle)
-        {
-            SetWindowPos( mHandle, 0, mX, mY,
-                          mWidth, mHeight,
-                          SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
+        if (mHandle) {
+            SetWindowPos(mHandle, 0, mX, mY,
+                         mWidth, mHeight,
+                         SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
     }
 
-    void setSize(int w, int h)
-    {
+    void setSize(int w, int h) {
         mWidth = w;
         mHeight = h;
-        if (mHandle)
-        {
-            SetWindowPos( mHandle, 0,
-                          mX, mY, w, h,
-                          SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE );
+        if (mHandle) {
+            SetWindowPos(mHandle, 0,
+                         mX, mY, w, h,
+                         SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
     }
 
-    void redraw()
-    {
-        if (mHandle)
-        {
+    void redraw() {
+        if (mHandle) {
             InvalidateRect(mHandle, 0, FALSE);
         }
     }
 
-    void blit(int dx, int dy, int width, int height, unsigned char * data)
-    {
-        if (mHandle)
-        {
+    void blit(int dx, int dy, int width, int height, unsigned char * data) {
+        if (mHandle) {
             HDC hDC = GetDC(0);
             HDC cDC = CreateCompatibleDC(hDC);
             HBITMAP hBmp = CreateCompatibleBitmap(hDC, width, height);
@@ -173,7 +150,7 @@ public:
             SelectObject(cDC, hBmp);
             SetDIBits(cDC, hBmp, 0, height, data, &info, DIB_RGB_COLORS);
 
-	        HDC whdc;
+            HDC whdc;
 
             whdc = GetDC(mHandle);
             BitBlt(whdc, 0, 0, width, height, cDC, 0, 0, SRCCOPY);
@@ -187,11 +164,9 @@ public:
         }
     }
 
-    void setTitle(std::string const & title)
-    {
+    void setTitle(std::string const & title) {
         mTitle = title;
-        if (mHandle)
-        {
+        if (mHandle) {
             SetWindowText(mHandle, title.c_str());
         }
     }

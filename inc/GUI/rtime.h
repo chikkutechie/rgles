@@ -14,7 +14,7 @@ public:
      * Capture the current time and set it.
      */
     void start();
-    
+
     /*!
      * Returns the time passed from start time.
      */

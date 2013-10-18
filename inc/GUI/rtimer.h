@@ -14,17 +14,15 @@ public:
     /*!
      * Retrieves the interval for the timer.
      */
-    int interval()
-    {
-    	return mInterval;
+    int interval() {
+        return mInterval;
     }
-    
+
     /*!
      * Sets the interval for the timer.
      */
-    void setInterval(int interval)
-    {
-    	mInterval = interval;
+    void setInterval(int interval) {
+        mInterval = interval;
     }
 
     /*!

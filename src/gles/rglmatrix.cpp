@@ -21,7 +21,7 @@ void RGLMatrix::reset()
     mData[3][3] = 1.0f;
 }
 
-void RGLMatrix::load( const GLfloat m[4 * 4] )
+void RGLMatrix::load(const GLfloat m[4 * 4])
 {
     mData[0][0] = m[0];
     mData[0][1] = m[1];
@@ -41,24 +41,24 @@ void RGLMatrix::load( const GLfloat m[4 * 4] )
     mData[3][3] = m[15];
 }
 
-RGLVectorf RGLMatrix::multiply( RGLVectorf const &p ) const
+RGLVectorf RGLMatrix::multiply(RGLVectorf const &p) const
 {
     RGLVectorf r;
 
-    r.setX( p.x()*mData[0][0] + p.y()*mData[1][0] + p.z()*mData[2][0] + p.w()
-            *mData[3][0] );
-    r.setY( p.x()*mData[0][1] + p.y()*mData[1][1] + p.z()*mData[2][1] + p.w()
-            *mData[3][1] );
-    r.setZ( p.x()*mData[0][2] + p.y()*mData[1][2] + p.z()*mData[2][2] + p.w()
-            *mData[3][2] );
-    r.setW( p.x()*mData[0][3] + p.y()*mData[1][3] + p.z()*mData[2][3] + p.w()
-            *mData[3][3] );
+    r.setX(p.x()*mData[0][0] + p.y()*mData[1][0] + p.z()*mData[2][0] + p.w()
+           *mData[3][0]);
+    r.setY(p.x()*mData[0][1] + p.y()*mData[1][1] + p.z()*mData[2][1] + p.w()
+           *mData[3][1]);
+    r.setZ(p.x()*mData[0][2] + p.y()*mData[1][2] + p.z()*mData[2][2] + p.w()
+           *mData[3][2]);
+    r.setW(p.x()*mData[0][3] + p.y()*mData[1][3] + p.z()*mData[2][3] + p.w()
+           *mData[3][3]);
 
     return r;
 }
 
-RGLMatrix &RGLMatrix::multiply( RGLMatrix &r, RGLMatrix const &a,
-                                const RGLMatrix &b )
+RGLMatrix &RGLMatrix::multiply(RGLMatrix &r, RGLMatrix const &a,
+                               const RGLMatrix &b)
 {
     GLfloat d00, d01, d02, d03;
     GLfloat d10, d11, d12, d13;
@@ -85,8 +85,7 @@ RGLMatrix &RGLMatrix::multiply( RGLMatrix &r, RGLMatrix const &a,
     d32 = b.mData[3][2];
     d33 = b.mData[3][3];
 
-    for ( GLint i = 0; i < 4; i++ )
-    {
+    for (GLint i = 0; i < 4; i++) {
         r.mData[i][0] = a.mData[i][0] * d00 + a.mData[i][1] * d10
                         + a.mData[i][2] * d20 + a.mData[i][3] * d30;
         r.mData[i][1] = a.mData[i][0] * d01 + a.mData[i][1] * d11
@@ -102,26 +101,25 @@ RGLMatrix &RGLMatrix::multiply( RGLMatrix &r, RGLMatrix const &a,
 
 GLfloat RGLMatrix::determinant() const
 {
-    GLfloat v = mData[3][3] * det3x3( mData[0][0], mData[0][1], mData[0][2],
-                                       mData[1][0], mData[1][1], mData[1][2],
-                                       mData[2][0], mData[2][1], mData[2][2] );
+    GLfloat v = mData[3][3] * det3x3(mData[0][0], mData[0][1], mData[0][2],
+                                     mData[1][0], mData[1][1], mData[1][2],
+                                     mData[2][0], mData[2][1], mData[2][2]);
 
-    if ( mData[3][0] == 0.0 && mData[3][1] == 0.0 && mData[3][2] == 0.0 )
-    {
+    if (mData[3][0] == 0.0 && mData[3][1] == 0.0 && mData[3][2] == 0.0) {
         return v;
     }
 
-    v = -mData[0][3] * det3x3( mData[1][0], mData[1][1], mData[1][2],
+    v = -mData[0][3] * det3x3(mData[1][0], mData[1][1], mData[1][2],
+                              mData[2][0], mData[2][1], mData[2][2],
+                              mData[3][0], mData[3][1], mData[3][2])
+
+        + mData[1][3] * det3x3(mData[0][0], mData[0][1], mData[0][2],
                                mData[2][0], mData[2][1], mData[2][2],
-                               mData[3][0], mData[3][1], mData[3][2] )
+                               mData[3][0], mData[3][1], mData[3][2])
 
-        + mData[1][3] * det3x3( mData[0][0], mData[0][1], mData[0][2],
-                                mData[2][0], mData[2][1], mData[2][2],
-                                mData[3][0], mData[3][1], mData[3][2] )
-
-        - mData[2][3] * det3x3( mData[0][0], mData[0][1], mData[0][2],
-                                mData[1][0], mData[1][1], mData[1][2],
-                                mData[3][0], mData[3][1], mData[3][2] )
+        - mData[2][3] * det3x3(mData[0][0], mData[0][1], mData[0][2],
+                               mData[1][0], mData[1][1], mData[1][2],
+                               mData[3][0], mData[3][1], mData[3][2])
         + v;
 
     return v;
@@ -197,8 +195,7 @@ RGLMatrix RGLMatrix::invertTranspose() const
 
     rcp = x30 * x32 + x20 * x22 + x10 * x12 + x00 * x02;
 
-    if ( rcp == (float)0 )
-    {
+    if (rcp == (float)0) {
         return *this;
     }
 

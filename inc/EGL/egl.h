@@ -31,41 +31,41 @@
 extern "C" {
 #endif
 
-typedef signed long long   EGLint64;
-typedef unsigned long long EGLuint64;
-typedef unsigned int       EGLuint32;
+    typedef signed long long   EGLint64;
+    typedef unsigned long long EGLuint64;
+    typedef unsigned int       EGLuint32;
 
-typedef EGLuint32          EGLNativeDisplayType;
-typedef void *          EGLNativeWindowType;
+    typedef EGLuint32          EGLNativeDisplayType;
+    typedef void *          EGLNativeWindowType;
 
-/* EGL Types */
-typedef int EGLint;
-typedef EGLuint32 EGLuint;
-typedef EGLuint EGLBoolean;
-typedef EGLuint EGLenum;
-typedef EGLuint EGLConfig;
-typedef EGLuint EGLContext;
-typedef EGLuint32 EGLDisplay;
-typedef EGLuint EGLSurface;
-typedef void *EGLClientBuffer;
+    /* EGL Types */
+    typedef int EGLint;
+    typedef EGLuint32 EGLuint;
+    typedef EGLuint EGLBoolean;
+    typedef EGLuint EGLenum;
+    typedef EGLuint EGLConfig;
+    typedef EGLuint EGLContext;
+    typedef EGLuint32 EGLDisplay;
+    typedef EGLuint EGLSurface;
+    typedef void *EGLClientBuffer;
 
-/* EGL Versioning */
+    /* EGL Versioning */
 #define EGL_VERSION_1_0                 1
 
-/* EGL aliases */
+    /* EGL aliases */
 #define EGL_FALSE                       0
 #define EGL_TRUE                        1
 
-/* Out-of-band handle values */
+    /* Out-of-band handle values */
 #define EGL_DEFAULT_DISPLAY             ((EGLNativeDisplayType)0)
 #define EGL_NO_CONTEXT                  ((EGLContext)0)
 #define EGL_NO_DISPLAY                  ((EGLDisplay)0)
 #define EGL_NO_SURFACE                  ((EGLSurface)0)
 
-/* Out-of-band attribute value */
+    /* Out-of-band attribute value */
 #define EGL_DONT_CARE                   ((EGLint)-1)
 
-/* Errors / GetError return values */
+    /* Errors / GetError return values */
 #define EGL_SUCCESS                     0x3000
 #define EGL_NOT_INITIALIZED             0x3001
 #define EGL_BAD_ACCESS                  0x3002
@@ -82,7 +82,7 @@ typedef void *EGLClientBuffer;
 #define EGL_BAD_SURFACE                 0x300D
 #define EGL_CONTEXT_LOST                0x300E  /* EGL 1.1 - IMG_power_management */
 
-/* Config attributes */
+    /* Config attributes */
 #define EGL_BUFFER_SIZE                 0x3020
 #define EGL_ALPHA_SIZE                  0x3021
 #define EGL_BLUE_SIZE                   0x3022
@@ -120,24 +120,24 @@ typedef void *EGLClientBuffer;
 #define EGL_CONFORMANT                  0x3042
 #define EGL_CONTEXT_DATA_SHARING_MODE   0x3043
 
-/* Config attribute values */
+    /* Config attribute values */
 #define EGL_SLOW_CONFIG                 0x3050  /* EGL_CONFIG_CAVEAT value */
 #define EGL_NON_CONFORMANT_CONFIG       0x3051  /* EGL_CONFIG_CAVEAT value */
 #define EGL_TRANSPARENT_RGB             0x3052  /* EGL_TRANSPARENT_TYPE value */
 #define EGL_RGB_BUFFER                  0x308E  /* EGL_COLOR_BUFFER_TYPE value */
 #define EGL_LUMINANCE_BUFFER            0x308F  /* EGL_COLOR_BUFFER_TYPE value */
 
-/* More config attribute values, for EGL_TEXTURE_FORMAT */
+    /* More config attribute values, for EGL_TEXTURE_FORMAT */
 #define EGL_NO_TEXTURE                  0x305C
 #define EGL_TEXTURE_RGB                 0x305D
 #define EGL_TEXTURE_RGBA                0x305E
 #define EGL_TEXTURE_2D                  0x305F
 
-/* Config attribute values for EGL_CONTEXT_DATA_SHARING_MODE */
+    /* Config attribute values for EGL_CONTEXT_DATA_SHARING_MODE */
 #define EGL_IMPLICIT_DATA_SHARING       0x30AE
 #define EGL_EXPLICIT_DATA_SHARING       0x30AF
 
-/* Config attribute mask bits */
+    /* Config attribute mask bits */
 #define EGL_PBUFFER_BIT                 0x0001  /* EGL_SURFACE_TYPE mask bits */
 #define EGL_PIXMAP_BIT                  0x0002  /* EGL_SURFACE_TYPE mask bits */
 #define EGL_WINDOW_BIT                  0x0004  /* EGL_SURFACE_TYPE mask bits */
@@ -152,13 +152,13 @@ typedef void *EGLClientBuffer;
 #define EGL_OPENGL_BIT                  0x0008  /* EGL_RENDERABLE_TYPE mask bits */
 
 
-/* QueryString targets */
+    /* QueryString targets */
 #define EGL_VENDOR                      0x3053
 #define EGL_VERSION                     0x3054
 #define EGL_EXTENSIONS                  0x3055
 #define EGL_CLIENT_APIS                 0x308D
 
-/* QuerySurface / CreatePbufferSurface targets */
+    /* QuerySurface / CreatePbufferSurface targets */
 #define EGL_HEIGHT                      0x3056
 #define EGL_WIDTH                       0x3057
 #define EGL_LARGEST_PBUFFER             0x3058
@@ -175,84 +175,84 @@ typedef void *EGLClientBuffer;
 #define EGL_SWAP_BEHAVIOR               0x3093
 #define EGL_MULTISAMPLE_RESOLVE         0x3099
 
-/* EGL_RENDER_BUFFER values / BindTexImage / ReleaseTexImage buffer targets */
+    /* EGL_RENDER_BUFFER values / BindTexImage / ReleaseTexImage buffer targets */
 #define EGL_BACK_BUFFER                 0x3084
 #define EGL_SINGLE_BUFFER               0x3085
 
-/* OpenVG color spaces */
+    /* OpenVG color spaces */
 #define EGL_VG_COLORSPACE_sRGB          0x3089  /* EGL_VG_COLORSPACE value */
 #define EGL_VG_COLORSPACE_LINEAR        0x308A  /* EGL_VG_COLORSPACE value */
 
-/* OpenVG alpha formats */
+    /* OpenVG alpha formats */
 #define EGL_VG_ALPHA_FORMAT_NONPRE      0x308B  /* EGL_VG_ALPHA_FORMAT value */
 #define EGL_VG_ALPHA_FORMAT_PRE         0x308C  /* EGL_VG_ALPHA_FORMAT value */
 
-/* Constant scale factor by which fractional display resolutions &
- * aspect ratio are scaled when queried as integer values.
- */
+    /* Constant scale factor by which fractional display resolutions &
+     * aspect ratio are scaled when queried as integer values.
+     */
 #define EGL_DISPLAY_SCALING             10000
 
-/* Unknown display resolution/aspect ratio */
+    /* Unknown display resolution/aspect ratio */
 #define EGL_UNKNOWN                     ((EGLint)-1)
 
-/* Back buffer swap behaviors */
+    /* Back buffer swap behaviors */
 #define EGL_BUFFER_PRESERVED            0x3094  /* EGL_SWAP_BEHAVIOR value */
 #define EGL_BUFFER_DESTROYED            0x3095  /* EGL_SWAP_BEHAVIOR value */
 
-/* CreatePbufferFromClientBuffer buffer types */
+    /* CreatePbufferFromClientBuffer buffer types */
 #define EGL_OPENVG_IMAGE                0x3096
 
-/* QueryContext targets */
+    /* QueryContext targets */
 #define EGL_CONTEXT_CLIENT_TYPE         0x3097
 
-/* CreateContext attributes */
+    /* CreateContext attributes */
 #define EGL_CONTEXT_CLIENT_VERSION      0x3098
 
-/* Multisample resolution behaviors */
+    /* Multisample resolution behaviors */
 #define EGL_MULTISAMPLE_RESOLVE_DEFAULT 0x309A  /* EGL_MULTISAMPLE_RESOLVE value */
 #define EGL_MULTISAMPLE_RESOLVE_BOX     0x309B  /* EGL_MULTISAMPLE_RESOLVE value */
 
-/* BindAPI/QueryAPI targets */
+    /* BindAPI/QueryAPI targets */
 #define EGL_OPENGL_ES_API               0x30A0
 #define EGL_OPENVG_API                  0x30A1
 #define EGL_OPENGL_API                  0x30A2
 #define EGL_OPENGL_SC_API               0x30A3
 
-/* GetCurrentSurface targets */
+    /* GetCurrentSurface targets */
 #define EGL_DRAW                        0x3059
 #define EGL_READ                        0x305A
 
-/* WaitNative engines */
+    /* WaitNative engines */
 #define EGL_CORE_NATIVE_ENGINE          0x305B
 
-/* EGL Functions */
-REGLAPI EGLDisplay REGLAPIENTRY eglGetDisplay(EGLNativeDisplayType display_id);
-REGLAPI EGLBoolean REGLAPIENTRY eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor);
-REGLAPI EGLBoolean REGLAPIENTRY eglTerminate(EGLDisplay dpy);
+    /* EGL Functions */
+    REGLAPI EGLDisplay REGLAPIENTRY eglGetDisplay(EGLNativeDisplayType display_id);
+    REGLAPI EGLBoolean REGLAPIENTRY eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor);
+    REGLAPI EGLBoolean REGLAPIENTRY eglTerminate(EGLDisplay dpy);
 
-REGLAPI const char * REGLAPIENTRY eglQueryString(EGLDisplay dpy, EGLint name);
+    REGLAPI const char * REGLAPIENTRY eglQueryString(EGLDisplay dpy, EGLint name);
 
-REGLAPI EGLBoolean REGLAPIENTRY eglGetConfigs(EGLDisplay dpy, EGLConfig *configs,
-                                            EGLint config_size, EGLint *num_config);
-REGLAPI EGLBoolean REGLAPIENTRY eglGetConfigAttrib(EGLDisplay dpy, EGLConfig config,
-                                                 EGLint attribute, EGLint *value);
+    REGLAPI EGLBoolean REGLAPIENTRY eglGetConfigs(EGLDisplay dpy, EGLConfig *configs,
+            EGLint config_size, EGLint *num_config);
+    REGLAPI EGLBoolean REGLAPIENTRY eglGetConfigAttrib(EGLDisplay dpy, EGLConfig config,
+            EGLint attribute, EGLint *value);
 
-REGLAPI EGLSurface REGLAPIENTRY eglCreateWindowSurface(EGLDisplay dpy, EGLConfig config,
-                                                     EGLNativeWindowType win,
-                                                     const EGLint *attrib_list);
+    REGLAPI EGLSurface REGLAPIENTRY eglCreateWindowSurface(EGLDisplay dpy, EGLConfig config,
+            EGLNativeWindowType win,
+            const EGLint *attrib_list);
 
-REGLAPI EGLContext REGLAPIENTRY eglCreateContext(EGLDisplay dpy, EGLConfig config,
-                                               EGLContext share_context,
-                                               const EGLint *attrib_list);
-REGLAPI EGLBoolean REGLAPIENTRY eglMakeCurrent(EGLDisplay dpy, EGLSurface draw,
-                                             EGLSurface read, EGLContext ctx);
+    REGLAPI EGLContext REGLAPIENTRY eglCreateContext(EGLDisplay dpy, EGLConfig config,
+            EGLContext share_context,
+            const EGLint *attrib_list);
+    REGLAPI EGLBoolean REGLAPIENTRY eglMakeCurrent(EGLDisplay dpy, EGLSurface draw,
+            EGLSurface read, EGLContext ctx);
 
-REGLAPI EGLBoolean REGLAPIENTRY eglDestroyContext(EGLDisplay dpy, EGLContext ctx);
-REGLAPI EGLBoolean REGLAPIENTRY eglDestroySurface(EGLDisplay dpy, EGLSurface surface);
+    REGLAPI EGLBoolean REGLAPIENTRY eglDestroyContext(EGLDisplay dpy, EGLContext ctx);
+    REGLAPI EGLBoolean REGLAPIENTRY eglDestroySurface(EGLDisplay dpy, EGLSurface surface);
 
-REGLAPI EGLBoolean REGLAPIENTRY eglSwapBuffers(EGLDisplay dpy, EGLSurface surface);
+    REGLAPI EGLBoolean REGLAPIENTRY eglSwapBuffers(EGLDisplay dpy, EGLSurface surface);
 
-REGLAPI EGLint REGLAPIENTRY eglGetError();
+    REGLAPI EGLint REGLAPIENTRY eglGetError();
 
 #ifdef __cplusplus
 }

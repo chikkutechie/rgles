@@ -14,9 +14,9 @@ namespace rtv
 {
 
 RApp::RApp()
- : mImpl(0),
-   mMainWindow(0),
-   mFinished(false)
+    : mImpl(0),
+      mMainWindow(0),
+      mFinished(false)
 {
     mImpl = new RAppImpl(this);
 }
@@ -33,69 +33,56 @@ bool RApp::init()
 
 void RApp::exec()
 {
-    if (mImpl->init())
-    {
-        if (mMainWindow)
-        {
-            if (!mMainWindow->create())
-            {
+    if (mImpl->init()) {
+        if (mMainWindow) {
+            if (!mMainWindow->create()) {
                 std::cerr << "Main window creation failed" << std::endl;
                 mFinished = true;
-            }
-            else
-            {
+            } else {
                 mMainWindow->show();
             }
-        }
-        else
-        {
+        } else {
             std::cerr << "Main window not set" << std::endl;
             mFinished = true;
         }
-    }
-    else
-    {
+    } else {
         std::cerr << "Application initialization failed" << std::endl;
         mFinished = true;
     }
 
-    while (!mFinished)
-    {
-    	EventData eve = mImpl->readEvent();
+    while (!mFinished) {
+        EventData eve = mImpl->readEvent();
 
-    	switch (eve.mType)
-    	{
-    	case RAPPFWEventReshape:
-    		break;
+        switch (eve.mType) {
+        case RAPPFWEventReshape:
+            break;
 
-    	case RAPPFWEventButtonClick:
-    		break;
+        case RAPPFWEventButtonClick:
+            break;
 
-    	case RAPPFWEventKeyPress:
-    		break;
+        case RAPPFWEventKeyPress:
+            break;
 
-    	case RAPPFWEventDraw:
-    		if (mMainWindow)
-    		{
-    			mMainWindow->draw();
-    		    mMainWindow->flush();
-    		}
-    		break;
+        case RAPPFWEventDraw:
+            if (mMainWindow) {
+                mMainWindow->draw();
+                mMainWindow->flush();
+            }
+            break;
 
         case RAPPFWEventExit:
-    		mFinished = true;
-    		break;
+            mFinished = true;
+            break;
 
-    	default:
-    		{
-    		break;
-    		}
-    	}
+        default: {
+            break;
+        }
+        }
 
-    	// check for timers to execution
-		// this may not be the perfect way to implement
-		// but this is good enough
-		checkTimers();
+        // check for timers to execution
+        // this may not be the perfect way to implement
+        // but this is good enough
+        checkTimers();
     }
 }
 

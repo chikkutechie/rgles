@@ -21,10 +21,10 @@ public:
     virtual void flush();
 
 protected:
-	EGLDisplay mDisplay;
-	EGLConfig mConfig;
-	EGLContext mContext;
-	EGLSurface mSurface;
+    EGLDisplay mDisplay;
+    EGLConfig mConfig;
+    EGLContext mContext;
+    EGLSurface mSurface;
 };
 
 }

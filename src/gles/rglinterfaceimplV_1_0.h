@@ -16,8 +16,8 @@ class RGLInterfaceImplV_1_0TextureUnit
 {
 public:
     RGLInterfaceImplV_1_0TextureUnit()
-     : mMode(GL_MODULATE),
-       mBoundTexture(0)
+        : mMode(GL_MODULATE),
+          mBoundTexture(0)
     {}
 
     GLint mMode;
@@ -29,13 +29,13 @@ class RGLInterfaceImplV_1_0Texture
 {
 public:
     RGLInterfaceImplV_1_0Texture()
-     : mTarget(GL_TEXTURE_2D),
-       mLevel(0),
-       mPixels(0),
-       mWrapS(GL_CLAMP),
-       mWrapT(GL_CLAMP),
-       mMinification(GL_NEAREST),
-       mMagnification(GL_NEAREST)
+        : mTarget(GL_TEXTURE_2D),
+          mLevel(0),
+          mPixels(0),
+          mWrapS(GL_CLAMP),
+          mWrapT(GL_CLAMP),
+          mMinification(GL_NEAREST),
+          mMagnification(GL_NEAREST)
     {}
 
     GLenum mTarget;
@@ -61,16 +61,16 @@ class RGLInterfaceImplV_1_0Light
 {
 public:
     RGLInterfaceImplV_1_0Light()
-     : mSpotExponent(0.0f),
-       mSpotCutoff(180.0f),
-       mConstantAttenuation(1.0f),
-       mLinearAttenuation(0.0f),
-       mQuadraticAttenuation(0.0f),
-       mAmbient(0.0f, 0.0f, 0.0f, 1.0f),
-       mDiffuse(1.0f, 1.0f, 1.0f, 1.0f),
-       mSpecular(1.0f, 1.0f, 1.0f, 1.0f),
-       mPosition(0.0f, 0.0f, 1.0f, 0.0f),
-       mSpotDirection(0.0f, 0.0f, -1.0f, 0.0f)
+        : mSpotExponent(0.0f),
+          mSpotCutoff(180.0f),
+          mConstantAttenuation(1.0f),
+          mLinearAttenuation(0.0f),
+          mQuadraticAttenuation(0.0f),
+          mAmbient(0.0f, 0.0f, 0.0f, 1.0f),
+          mDiffuse(1.0f, 1.0f, 1.0f, 1.0f),
+          mSpecular(1.0f, 1.0f, 1.0f, 1.0f),
+          mPosition(0.0f, 0.0f, 1.0f, 0.0f),
+          mSpotDirection(0.0f, 0.0f, -1.0f, 0.0f)
     {}
 
     GLfloat mSpotExponent;
@@ -89,10 +89,10 @@ class RGLInterfaceImplV_1_0Material
 {
 public:
     RGLInterfaceImplV_1_0Material()
-     : mAmbient(0.2f, 0.2f, 0.2f, 1.0f),
-       mDiffuse(0.8f, 0.8f, 0.8f, 1.0f),
-       mSpecular(0.0f, 0.0f, 0.0f, 1.0f),
-       mEmissive(0.0f, 0.0f, 0.0f, 1.0f)
+        : mAmbient(0.2f, 0.2f, 0.2f, 1.0f),
+          mDiffuse(0.8f, 0.8f, 0.8f, 1.0f),
+          mSpecular(0.0f, 0.0f, 0.0f, 1.0f),
+          mEmissive(0.0f, 0.0f, 0.0f, 1.0f)
     {}
 
     RGLColorf mAmbient;
@@ -105,8 +105,8 @@ class RGLInterfaceImplV_1_0VertexData
 {
 public:
     RGLInterfaceImplV_1_0VertexData()
-        : mSize( 3 ),
-          mPointer( 0 )
+        : mSize(3),
+          mPointer(0)
     {}
 
     GLint mSize;
@@ -119,9 +119,9 @@ class RGLInterfaceImplV_1_0Buffers
 {
 public:
     RGLInterfaceImplV_1_0Buffers()
-        : mColor( 0 ),
-          mDepth( 0 ),
-          mStencil( 0 )
+        : mColor(0),
+          mDepth(0),
+          mStencil(0)
     {}
 
     RGLColorf *mColor;
@@ -133,17 +133,15 @@ class RGLInterfaceImplV_1_0Feature
 {
 public:
     RGLInterfaceImplV_1_0Feature()
-        : mDepthTest( false ),
-          mVertexArray( false ),
-          mColorArray( false ),
-          mNormalArray( false ),
-          mTexCoordArray( false ),
+        : mDepthTest(false),
+          mVertexArray(false),
+          mColorArray(false),
+          mNormalArray(false),
+          mTexCoordArray(false),
           mColorMaterial(false),
-          mLighting( false ),
-          mTexture2D( false )
-    {
-        for (int i=0; i<GL_MAX_LIGHT_UNITS; ++i)
-        {
+          mLighting(false),
+          mTexture2D(false) {
+        for (int i = 0; i < GL_MAX_LIGHT_UNITS; ++i) {
             mLights[i] = false;
         }
     }
@@ -162,38 +160,35 @@ public:
 class RGLInterfaceImplV_1_0Funcs
 {
 public:
-    RGLInterfaceImplV_1_0Funcs()
-    {
+    RGLInterfaceImplV_1_0Funcs() {
         mDepthFunc = rglFuncLess;
     }
 
-    bool ( *mDepthFunc )( const GLfloat &, const GLfloat & );
+    bool (*mDepthFunc)(const GLfloat &, const GLfloat &);
 };
 
 class RGLInterfaceImplV_1_0State
 {
 public:
     RGLInterfaceImplV_1_0State()
-        : mClearColor( 0.0f, 0.0f, 0.0f, 1.0f ),
-          mClearDepth( 0.0f ),
-          mClearStencil( 0.0f ),
-          mCurrentColor( 1.0f, 1.0f, 1.0f, 1.0f ),
+        : mClearColor(0.0f, 0.0f, 0.0f, 1.0f),
+          mClearDepth(0.0f),
+          mClearStencil(0.0f),
+          mCurrentColor(1.0f, 1.0f, 1.0f, 1.0f),
           mCurrentNormal(0.0f, 0.0f, 1.0f),
-          mViewportX( 0 ),
-          mViewportY( 0 ),
-          mViewportWidth( 0 ),
-          mViewportHeight( 0 ),
-          mWidth( 0 ),
-          mHeight( 0 ),
-          mError( GL_NO_ERROR ),
-          mMatrixMode( GL_PROJECTION ),
-          mCurrentActiveTexture( 0 )
-    {
+          mViewportX(0),
+          mViewportY(0),
+          mViewportWidth(0),
+          mViewportHeight(0),
+          mWidth(0),
+          mHeight(0),
+          mError(GL_NO_ERROR),
+          mMatrixMode(GL_PROJECTION),
+          mCurrentActiveTexture(0) {
         mDepthRange[0] = 0.0f;
         mDepthRange[1] = 1.0f;
 
-        for (int i=0; i<GL_MAX_TEXTURE_UNITS; ++i)
-        {
+        for (int i = 0; i < GL_MAX_TEXTURE_UNITS; ++i) {
             mActiveTextures[i] = 0;
         }
         mActiveTextures[0] = 1;
@@ -238,11 +233,11 @@ private:
 
 public:
     RGLInterfaceImplV_1_0Primitive()
-        : mCount( 0 ),
-          mPoints( 0 ),
-          mColors( 0 ),
-          mNormals( 0 ),
-          mTexCoords( 0 )
+        : mCount(0),
+          mPoints(0),
+          mColors(0),
+          mNormals(0),
+          mTexCoords(0)
     {}
 
     GLint mMode;
@@ -260,9 +255,9 @@ public:
     {
     public:
         Fragment()
-            : mDepth( 0.0f ),
-              mCoverage( 0.0f ),
-              mValid( false )
+            : mDepth(0.0f),
+              mCoverage(0.0f),
+              mValid(false)
         {}
 
         RGLVector2Di mPoint;
@@ -272,43 +267,36 @@ public:
         bool mValid;
     };
 
-    RGLInterfaceImplV_1_0Fragments( int width, int height )
-        : mFragments( width * height ),
-          mWidth( width )
+    RGLInterfaceImplV_1_0Fragments(int width, int height)
+        : mFragments(width * height),
+          mWidth(width)
     {}
 
     ~RGLInterfaceImplV_1_0Fragments()
     {}
 
-    void add( Fragment const &fragment )
-    {
+    void add(Fragment const &fragment) {
         int index = fragment.mPoint.x() + fragment.mPoint.y() * mWidth;
         mFragments[index] = fragment;
         mFragments[index].mValid = true;
     }
 
-    int count() const
-    {
+    int count() const {
         return mFragments.size();
     }
 
-    Fragment *data()
-    {
+    Fragment *data() {
         return &mFragments[0];
     }
 
-    const Fragment *data() const
-    {
+    const Fragment *data() const {
         return &mFragments[0];
     }
 
-    void reset()
-    {
-        static const int count = mFragments.size(); 
-        for (int i=0; i<count; ++i)
-        {
-            if (mFragments[i].mValid)
-            {
+    void reset() {
+        static const int count = mFragments.size();
+        for (int i = 0; i < count; ++i) {
+            if (mFragments[i].mValid) {
                 mFragments[i] = Fragment();
             }
         }
@@ -324,8 +312,7 @@ class RGLInterfaceImplV_1_0: public RGLInterface
 protected:
 
     /* for clipping */
-    enum OutCode
-    {
+    enum OutCode {
         Inside = 0,
         Left = 1,
         Right = 2,
@@ -338,103 +325,102 @@ public:
 
     /* transformations */
     virtual void loadIdentity();
-    virtual void loadMatrix( const GLfloat m[16] );
-    virtual void matrixMode( GLenum mode );
+    virtual void loadMatrix(const GLfloat m[16]);
+    virtual void matrixMode(GLenum mode);
 
-    virtual void scale( GLfloat sx, GLfloat sy, GLfloat sz );
-    virtual void translate( GLfloat tx, GLfloat ty, GLfloat tz );
-    virtual void rotate( GLfloat angle, GLfloat ax, GLfloat ay, GLfloat az );
+    virtual void scale(GLfloat sx, GLfloat sy, GLfloat sz);
+    virtual void translate(GLfloat tx, GLfloat ty, GLfloat tz);
+    virtual void rotate(GLfloat angle, GLfloat ax, GLfloat ay, GLfloat az);
 
-    virtual void frustum( GLfloat leftValue, GLfloat rightValue,
-                          GLfloat bottomValue, GLfloat topValue,
-                          GLfloat nearValue, GLfloat farValue );
-    virtual void ortho( GLfloat leftValue, GLfloat rightValue,
-                        GLfloat bottomValue, GLfloat topValue,
-                        GLfloat nearValue, GLfloat farValue );
+    virtual void frustum(GLfloat leftValue, GLfloat rightValue,
+                         GLfloat bottomValue, GLfloat topValue,
+                         GLfloat nearValue, GLfloat farValue);
+    virtual void ortho(GLfloat leftValue, GLfloat rightValue,
+                       GLfloat bottomValue, GLfloat topValue,
+                       GLfloat nearValue, GLfloat farValue);
 
-    virtual void enable( GLenum cap );
-    virtual void disable( GLenum cap );
+    virtual void enable(GLenum cap);
+    virtual void disable(GLenum cap);
 
-    virtual void depthFunc( GLenum func );
+    virtual void depthFunc(GLenum func);
 
     /* flush operations */
     virtual void flush();
     virtual void finish();
 
     /* retrieve color buffer */
-    virtual void readPixels( GLint x, GLint y, GLsizei width, GLsizei height,
-                             GLenum format, GLenum type, GLvoid *pixels, bool originTopLeft = false );
+    virtual void readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
+                            GLenum format, GLenum type, GLvoid *pixels, bool originTopLeft = false);
 
     /* drawing operations */
-    virtual void normalPointer( GLenum type, GLsizei stride,
-                                const GLvoid *pointer );
-    virtual void colorPointer( GLint size, GLenum type,
-                               GLsizei stride,
-                               const GLvoid *pointer );
-    virtual void vertexPointer( GLint size, GLenum type,
-                                GLsizei stride, const GLvoid *pointer );
-    virtual void drawArrays( GLenum mode, GLint first, GLsizei count );
+    virtual void normalPointer(GLenum type, GLsizei stride,
+                               const GLvoid *pointer);
+    virtual void colorPointer(GLint size, GLenum type,
+                              GLsizei stride,
+                              const GLvoid *pointer);
+    virtual void vertexPointer(GLint size, GLenum type,
+                               GLsizei stride, const GLvoid *pointer);
+    virtual void drawArrays(GLenum mode, GLint first, GLsizei count);
 
     /* clear operations */
-    virtual void clearColor( GLclampf r, GLclampf g, GLclampf b, GLclampf a );
+    virtual void clearColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a);
 
-    virtual void clear( GLbitfield mask );
+    virtual void clear(GLbitfield mask);
 
     /* color settings */
-    virtual void color( GLfloat r, GLfloat g, GLfloat b, GLfloat a );
+    virtual void color(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 
     /* light settings */
-    void normal( GLfloat nx, GLfloat ny, GLfloat nz );
-    void light( GLenum light, GLenum pname, const GLfloat *params );
-    void material( GLenum face, GLenum pname, const GLfloat *params );
+    void normal(GLfloat nx, GLfloat ny, GLfloat nz);
+    void light(GLenum light, GLenum pname, const GLfloat *params);
+    void material(GLenum face, GLenum pname, const GLfloat *params);
 
     /* textures */
-    void bindTexture (GLenum target, GLuint texture);
-    void genTextures( GLsizei n, GLuint *textures );
-    void deleteTextures( GLsizei n, const GLuint *textures );
+    void bindTexture(GLenum target, GLuint texture);
+    void genTextures(GLsizei n, GLuint *textures);
+    void deleteTextures(GLsizei n, const GLuint *textures);
 
-    void texCoordPointer( GLint size, GLenum type, GLsizei stride,
-								  const GLvoid *pointer );
+    void texCoordPointer(GLint size, GLenum type, GLsizei stride,
+                         const GLvoid *pointer);
     void texEnv(GLenum target, GLenum pname, const GLint *params);
 
-    void texImage2D ( GLenum target, GLint level, GLint internalformat,
-								GLsizei width, GLsizei height, GLint border,
-								GLenum format, GLenum type, const GLvoid *pixels );
+    void texImage2D(GLenum target, GLint level, GLint internalformat,
+                    GLsizei width, GLsizei height, GLint border,
+                    GLenum format, GLenum type, const GLvoid *pixels);
     void texParameter(GLenum target, GLenum pname, const GLint *params);
 
-    void viewport( int x, int y, int width, int height );
+    void viewport(int x, int y, int width, int height);
 
-    virtual GLenum getError()
-    {
+    virtual GLenum getError() {
         return mState->mError;
     }
 
-    void initialize( InitParam const &param, void * state );
+    void initialize(InitParam const &param, void * state);
 
 protected:
-    void drawPoint( RGLInterfaceImplV_1_0Fragments &fragments,
-                    RGLInterfaceImplV_1_0Primitive const & primitive );
-    void drawLine( RGLInterfaceImplV_1_0Fragments &fragments,
-                   RGLInterfaceImplV_1_0Primitive const & primitive );
-    void drawTriangle( RGLInterfaceImplV_1_0Fragments &fragments,
-                       RGLInterfaceImplV_1_0Primitive const & primitive );
+    void drawPoint(RGLInterfaceImplV_1_0Fragments &fragments,
+                   RGLInterfaceImplV_1_0Primitive const & primitive);
+    void drawLine(RGLInterfaceImplV_1_0Fragments &fragments,
+                  RGLInterfaceImplV_1_0Primitive const & primitive);
+    void drawTriangle(RGLInterfaceImplV_1_0Fragments &fragments,
+                      RGLInterfaceImplV_1_0Primitive const & primitive);
 
-    void perVertexOperations( RGLInterfaceImplV_1_0Primitive *primitive );
+    void perVertexOperations(RGLInterfaceImplV_1_0Primitive *primitive);
     bool enabledLighting();
-    void applyLighting( RGLInterfaceImplV_1_0Primitive *primitive, RGLColorf * colors );
-    void clipAndRasterization( RGLInterfaceImplV_1_0Primitive *primitive );
-    void perFragmentOperations( RGLInterfaceImplV_1_0Fragments &fragments );
+    void applyLighting(RGLInterfaceImplV_1_0Primitive *primitive, RGLColorf * colors);
+    void clipAndRasterization(RGLInterfaceImplV_1_0Primitive *primitive);
+    void perFragmentOperations(RGLInterfaceImplV_1_0Fragments &fragments);
 
-    OutCode computeOutCode( GLfloat x, GLfloat y,
-                            GLfloat xmin, GLfloat ymin,
-                            GLfloat xmax, GLfloat ymax );
-    int clipLine( RGLVectorf &p1, RGLVectorf &p2 );
+    OutCode computeOutCode(GLfloat x, GLfloat y,
+                           GLfloat xmin, GLfloat ymin,
+                           GLfloat xmax, GLfloat ymax);
+    int clipLine(RGLVectorf &p1, RGLVectorf &p2);
 
-    bool depthTest( const RGLInterfaceImplV_1_0Fragments::Fragment &fragment );
-    void nearestFilter( RGLInterfaceImplV_1_0Texture * texture,
-    			        GLfloat s, GLfloat t, RGLColorf & result );
-    void extractRGBA( RGLInterfaceImplV_1_0Texture * texture,
-    		          GLint row, GLint col, RGLColorf & result );
+    bool depthTest(const RGLInterfaceImplV_1_0Fragments::Fragment &fragment);
+    void nearestFilter(RGLInterfaceImplV_1_0Texture * texture,
+                       GLfloat s, GLfloat t, RGLColorf & result);
+    void extractRGBA(RGLInterfaceImplV_1_0Texture * texture,
+                     GLint row, GLint col, RGLColorf & result);
 protected:
     RGLInterfaceImplV_1_0State * mState;
 };

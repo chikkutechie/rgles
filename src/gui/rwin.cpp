@@ -13,7 +13,7 @@ namespace rtv
 {
 
 RWin::RWin()
- : mImpl(0)
+    : mImpl(0)
 {
     mImpl = new RWinImpl(0, this);
 }
@@ -30,8 +30,8 @@ bool RWin::create()
 
 void RWin::redraw()
 {
-	mImpl->redraw();
-	mImpl->flush();
+    mImpl->redraw();
+    mImpl->flush();
 }
 
 void RWin::draw()
@@ -81,12 +81,12 @@ void RWin::setSize(int w, int h)
 
 void RWin::blit(int x, int y, int width, int height, unsigned char * data)
 {
-	mImpl->blit( x, y, width, height, data );
+    mImpl->blit(x, y, width, height, data);
 }
 
 void RWin::setTitle(std::string const & title)
 {
-	mImpl->setTitle(title);
+    mImpl->setTitle(title);
 }
 
 }

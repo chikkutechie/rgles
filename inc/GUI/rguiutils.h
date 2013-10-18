@@ -9,24 +9,21 @@ template <typename T>
 class RSize
 {
 public:
-    RSize( T w = 0, T h = 0 )
-        : mW( w ),
-          mH( h )
+    RSize(T w = 0, T h = 0)
+        : mW(w),
+          mH(h)
     {}
 
-    void set( T w = 0, T h = 0 )
-    {
+    void set(T w = 0, T h = 0) {
         mW = w;
         mH = h;
     }
 
-    T width() const
-    {
+    T width() const {
         return mW;
     }
 
-    T height() const
-    {
+    T height() const {
         return mH;
     }
 
@@ -42,24 +39,21 @@ template <typename T>
 class RPosition
 {
 public:
-    RPosition( T v1 = 0, T v2 = 0 )
-        : mX( v1 ),
-          mY( v2 )
+    RPosition(T v1 = 0, T v2 = 0)
+        : mX(v1),
+          mY(v2)
     {}
 
-    void set( T x = 0, T y = 0 )
-    {
+    void set(T x = 0, T y = 0) {
         mX = x;
         mY = y;
     }
 
-    T x() const
-    {
+    T x() const {
         return mX;
     }
 
-    T y() const
-    {
+    T y() const {
         return mY;
     }
 

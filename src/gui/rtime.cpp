@@ -22,7 +22,7 @@ static const int MSecPerMinute  = 60 * MSecPerSec;
 static const int MSecPerHour    = 60 * MSecPerMinute;
 
 RTime::RTime()
- : mMS(0)
+    : mMS(0)
 {}
 
 void RTime::start()

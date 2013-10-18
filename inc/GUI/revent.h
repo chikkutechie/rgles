@@ -5,28 +5,27 @@
 namespace rtv
 {
 
-enum EventType
-{
-	RAPPFWEventNone,
-	RAPPFWEventReshape,
-	RAPPFWEventButtonClick,
-	RAPPFWEventKeyPress,
-	RAPPFWEventDraw,
+enum EventType {
+    RAPPFWEventNone,
+    RAPPFWEventReshape,
+    RAPPFWEventButtonClick,
+    RAPPFWEventKeyPress,
+    RAPPFWEventDraw,
     RAPPFWEventResize,
-	RAPPFWEventExit
+    RAPPFWEventExit
 };
 
 class EventData
 {
 public:
-	EventData()
-	 : mType(RAPPFWEventNone)
-	{}
+    EventData()
+        : mType(RAPPFWEventNone)
+    {}
 
-	EventType mType;
-	char mKey;
-	int mX;
-	int mY;
+    EventType mType;
+    char mKey;
+    int mX;
+    int mY;
     int mWidth;
     int mHeight;
 };

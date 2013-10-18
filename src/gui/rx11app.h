@@ -17,80 +17,66 @@ class RAppImpl
 {
 public:
     RAppImpl(RApp * app)
-     : mApp(app),
-       mDisplay(0)
+        : mApp(app),
+          mDisplay(0)
     {}
 
-    virtual ~RAppImpl()
-    {
-		if (mDisplay)
-		{
-			XCloseDisplay(mDisplay);
-		}
+    virtual ~RAppImpl() {
+        if (mDisplay) {
+            XCloseDisplay(mDisplay);
+        }
     }
 
-    virtual bool init()
-    {
-		if (!mDisplay)
-		{
-			mDisplay = XOpenDisplay( 0 );
-		}
+    virtual bool init() {
+        if (!mDisplay) {
+            mDisplay = XOpenDisplay(0);
+        }
         return mDisplay != 0;
     }
 
-    EventData readEvent()
-    {
-    	EventData appEve;
-		
-		if (!mDisplay)
-		{
-			return appEve;
-		}
-		
+    EventData readEvent() {
+        EventData appEve;
+
+        if (!mDisplay) {
+            return appEve;
+        }
+
         XEvent event;
         KeySym key;
         char text[255];
 
-        if (XPending(mDisplay))
-        {
-			XNextEvent( mDisplay, &event );
+        if (XPending(mDisplay)) {
+            XNextEvent(mDisplay, &event);
 
-			switch (event.type)
-			{
-				case Expose:
-				{
-					if (event.xexpose.count == 0)
-					{
-						appEve.mType = RAPPFWEventDraw;
-					}
-					break;
-				}
+            switch (event.type) {
+            case Expose: {
+                if (event.xexpose.count == 0) {
+                    appEve.mType = RAPPFWEventDraw;
+                }
+                break;
+            }
 
-				case KeyPress:
-				{
-					if (XLookupString(&event.xkey,text,255,&key,0)==1)
-					{
-						appEve.mType = RAPPFWEventKeyPress;
-						appEve.mKey = text[0];
-					}
-					break;
-				}
+            case KeyPress: {
+                if (XLookupString(&event.xkey, text, 255, &key, 0) == 1) {
+                    appEve.mType = RAPPFWEventKeyPress;
+                    appEve.mKey = text[0];
+                }
+                break;
+            }
 
-				case ButtonPress:
-				{
-					appEve.mType = RAPPFWEventButtonClick;
-					appEve.mX = event.xbutton.x;
-					appEve.mY = event.xbutton.y;
-					break;
-				}
-			}
+            case ButtonPress: {
+                appEve.mType = RAPPFWEventButtonClick;
+                appEve.mX = event.xbutton.x;
+                appEve.mY = event.xbutton.y;
+                break;
+            }
+            }
         }
 
         return appEve;
     }
 
-    unsigned int handle()
-    {
+    unsigned int handle() {
         return (unsigned int)mDisplay;
     }
 

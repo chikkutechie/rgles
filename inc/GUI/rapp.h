@@ -43,11 +43,11 @@ protected:
     bool mFinished;
 
     class TimerEntry
-	{
+    {
     public:
-    	RTime mTime;
+        RTime mTime;
         RTimer *mTimer;
-	};
+    };
 
     typedef std::vector<TimerEntry> TimerSet;
     typedef TimerSet::iterator TimerSetIter;
