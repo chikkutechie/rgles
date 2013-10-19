@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ~/rgles/linux  && make $*
+cd ~/rgles/linux  && make -j12 $*
 

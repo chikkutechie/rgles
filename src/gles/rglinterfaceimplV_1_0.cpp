@@ -648,7 +648,8 @@ void RGLInterfaceImplV_1_0::drawArrays(GLenum mode, GLint first,
                                         mState->mVertexData.mType,
                                         first, count);
 
-    if (mState->mFeature.mTexCoordArray &&
+    if (mState->mFeature.mTexture2D &&
+    		mState->mFeature.mTexCoordArray &&
             mState->mTexCoordData.mPointer) {
         texcoords = (RGLColorf *) readVertexData(mState->mTexCoordData.mPointer,
                     mState->mTexCoordData.mSize,
@@ -749,6 +750,14 @@ void RGLInterfaceImplV_1_0::drawPoint(RGLInterfaceImplV_1_0Fragments
             fragment.mColor = mState->mCurrentColor;
         }
 
+        if (mState->mFeature.mTexture2D) {
+        	if (primitive.mTexCoords) {
+        		fragment.mTexCoords = primitive.mTexCoords[0];
+        	} else {
+        		fragment.mTexCoords = mState->mCurrentTexCoord;
+        	}
+        }
+
         fragment.mPoint = RGLVector2Di((int)p.x(), (int)p.y());
         fragment.mDepth = depth;
 
@@ -762,9 +771,9 @@ void RGLInterfaceImplV_1_0::drawLine(RGLInterfaceImplV_1_0Fragments
 {
     RGLVectorf p1 = primitive.mPoints[0];
     RGLVectorf p2 = primitive.mPoints[1];
-    const RGLColorf &c1 = primitive.mColors[0];
-    const RGLColorf &c2 = primitive.mColors[1];
+
     RGLColorf color;
+    RGLVectorf texcoord;
 
     clipLine(p1, p2);
 
@@ -773,28 +782,27 @@ void RGLInterfaceImplV_1_0::drawLine(RGLInterfaceImplV_1_0Fragments
 
     for (; t <= 1.0f; t += tInc) {
         RGLInterfaceImplV_1_0Primitive pointPrimitive;
-        RGLVectorf point(interpolate(t, p1.x(), p2.x()),
-                         interpolate(t, p1.y(), p2.y()),
-                         interpolate(t, p1.z(), p2.z()));
+        RGLVectorf point(interpolate(t, p1, p2));
 
         pointPrimitive.mCount = 1;
         pointPrimitive.mPoints = &point;
         pointPrimitive.mMode = GL_POINTS;
 
         if (primitive.mColors) {
-            color = RGLColorf(interpolate(t, c1.r(), c2.r()),
-                              interpolate(t, c1.g(), c2.g()),
-                              interpolate(t, c1.b(), c2.b()),
-                              interpolate(t, c1.a(), c2.a()));
+            color = interpolate(t, primitive.mColors[0], primitive.mColors[1]);
 
             pointPrimitive.mColors = &color;
+        }
+        if (primitive.mTexCoords) {
+        	texcoord = interpolate(t, primitive.mTexCoords[0], primitive.mTexCoords[1]);
+        	pointPrimitive.mTexCoords = &texcoord;
         }
 
         drawPoint(fragments, pointPrimitive);
     }
 }
 
-/* This one of the most worst way to render triangle, but performance is not our aim */
+/* This one of the most worst way to render a triangle, but performance is not our aim */
 void RGLInterfaceImplV_1_0::drawTriangle(RGLInterfaceImplV_1_0Fragments
         &fragments,
         RGLInterfaceImplV_1_0Primitive const & primitive)
@@ -803,16 +811,14 @@ void RGLInterfaceImplV_1_0::drawTriangle(RGLInterfaceImplV_1_0Fragments
     const RGLVectorf &p2 = primitive.mPoints[1];
     const RGLVectorf &p3 = primitive.mPoints[2];
     RGLColorf colors[2];
+    RGLVectorf texcoords[2];
 
     float t = 0.0f;
     float tInc = 0.5f / lineLength(p2, p3);
 
     for (; t <= 1.0f; t += tInc) {
         RGLInterfaceImplV_1_0Primitive linePrimitive;
-        RGLVectorf points[2] = {p1, RGLVectorf(interpolate(t, p2.x(), p3.x()),
-                                               interpolate(t, p2.y(), p3.y()),
-                                               interpolate(t, p2.z(), p3.z()))
-                               };
+        RGLVectorf points[2] = {p1, interpolate(t, p2, p3)};
 
         linePrimitive.mCount = 2;
         linePrimitive.mPoints = &points[0];
@@ -824,12 +830,19 @@ void RGLInterfaceImplV_1_0::drawTriangle(RGLInterfaceImplV_1_0Fragments
             const RGLColorf &c3 = primitive.mColors[2];
 
             colors[0] = c1;
-            colors[1] = RGLColorf(interpolate(t, c2.r(), c3.r()),
-                                  interpolate(t, c2.g(), c3.g()),
-                                  interpolate(t, c2.b(), c3.b()),
-                                  interpolate(t, c2.a(), c3.a()));
+            colors[1] = interpolate(t, c2, c3);
 
             linePrimitive.mColors = &colors[0];
+        }
+        if (primitive.mTexCoords) {
+            const RGLColorf &v1 = primitive.mTexCoords[0];
+            const RGLColorf &v2 = primitive.mTexCoords[1];
+            const RGLColorf &v3 = primitive.mTexCoords[2];
+
+            texcoords[0] = v1;
+            texcoords[1] = interpolate(t, v2, v3);
+
+            linePrimitive.mTexCoords = &texcoords[0];
         }
 
         drawLine(fragments, linePrimitive);
@@ -875,7 +888,7 @@ void RGLInterfaceImplV_1_0::perVertexOperations(
     /*
     * generate window coordinate
     * this will generate window coordinate
-    * with respect to viewport (x, y) and (width, height)
+    * with respect to view port (x, y) and (width, height)
     */
     GLfloat dz = mState->mDepthRange[1] - mState->mDepthRange[0];
     GLfloat cz = (mState->mDepthRange[1] + mState->mDepthRange[0])  / 2.0f;
@@ -1010,6 +1023,9 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             if (primitive->mColors) {
                 pointPrimitive.mColors = &(primitive->mColors[i]);
             }
+            if (primitive->mTexCoords) {
+            	pointPrimitive.mTexCoords = &(primitive->mTexCoords[i]);
+            }
             drawPoint(fragments,  pointPrimitive);
             perFragmentOperations(fragments);
         }
@@ -1039,6 +1055,10 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
                 linePrimitive.mColors = primitive->mColors + 2 * i;
             }
 
+            if (primitive->mTexCoords) {
+            	linePrimitive.mTexCoords = primitive->mTexCoords + 2 * i;
+            }
+
             drawLine(fragments, linePrimitive);
             perFragmentOperations(fragments);
         }
@@ -1057,11 +1077,17 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
 
         RGLColorf colors[2];
         RGLVectorf points[2];
+        RGLVectorf texcoords[2];
         points[0] = primitive->mPoints[0];
 
         if (primitive->mColors) {
             colors[0] = primitive->mColors[0];
             linePrimitive.mColors = &(colors[0]);
+        }
+
+        if (primitive->mTexCoords) {
+        	texcoords[0] = primitive->mTexCoords[0];
+            linePrimitive.mTexCoords = &(texcoords[0]);
         }
 
         linePrimitive.mPoints = &(points[0]);
@@ -1072,6 +1098,10 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
                 colors[1] = primitive->mColors[i];
             }
 
+            if (primitive->mTexCoords) {
+            	texcoords[1] = primitive->mTexCoords[i];
+            }
+
             drawLine(fragments, linePrimitive);
             perFragmentOperations(fragments);
 
@@ -1080,11 +1110,17 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             if (primitive->mColors) {
                 colors[0] = colors[1];
             }
+            if (primitive->mTexCoords) {
+            	texcoords[0] = texcoords[1];
+            }
         }
 
         points[1] = primitive->mPoints[0];
         if (primitive->mColors) {
             colors[1] = primitive->mColors[0];
+        }
+        if (primitive->mTexCoords) {
+        	texcoords[1] = primitive->mTexCoords[0];
         }
 
         drawLine(fragments, linePrimitive);
@@ -1104,11 +1140,16 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
 
         RGLColorf colors[2];
         RGLVectorf points[2];
+        RGLVectorf texcoords[2];
         points[0] = primitive->mPoints[0];
 
         if (primitive->mColors) {
             colors[0] = primitive->mColors[0];
             linePrimitive.mColors = &(colors[0]);
+        }
+        if (primitive->mTexCoords) {
+        	texcoords[0] = primitive->mTexCoords[0];
+            linePrimitive.mTexCoords = &(texcoords[0]);
         }
 
         linePrimitive.mPoints = &(points[0]);
@@ -1118,6 +1159,9 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             if (primitive->mColors) {
                 colors[1] = primitive->mColors[i];
             }
+            if (primitive->mTexCoords) {
+            	texcoords[1] = primitive->mTexCoords[i];
+            }
 
             drawLine(fragments, linePrimitive);
             perFragmentOperations(fragments);
@@ -1126,6 +1170,9 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
 
             if (primitive->mColors) {
                 colors[0] = colors[1];
+            }
+            if (primitive->mTexCoords) {
+            	texcoords[0] = texcoords[1];
             }
         }
 
@@ -1150,6 +1197,9 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             if (primitive->mColors) {
                 trianglePrimitive.mColors = primitive->mColors + (3 * i);
             }
+            if (primitive->mTexCoords) {
+                trianglePrimitive.mTexCoords = primitive->mTexCoords + (3 * i);
+            }
             drawTriangle(fragments, trianglePrimitive);
             perFragmentOperations(fragments);
         }
@@ -1169,11 +1219,17 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
 
         RGLColorf colors[3];
         RGLVectorf points[3];
+        RGLVectorf texcoords[3];
 
         if (primitive->mColors) {
             colors[0] = primitive->mColors[0];
             colors[1] = primitive->mColors[1];
             trianglePrimitive.mColors = &(colors[0]);
+        }
+        if (primitive->mTexCoords) {
+        	texcoords[0] = primitive->mTexCoords[0];
+        	texcoords[1] = primitive->mTexCoords[1];
+            trianglePrimitive.mTexCoords = &(texcoords[0]);
         }
 
         trianglePrimitive.mPoints = &(points[0]);
@@ -1187,6 +1243,9 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             if (primitive->mColors) {
                 colors[2] = primitive->mColors[i];
             }
+            if (primitive->mTexCoords) {
+            	texcoords[2] = primitive->mTexCoords[i];
+            }
 
             drawTriangle(fragments, trianglePrimitive);
             perFragmentOperations(fragments);
@@ -1195,6 +1254,9 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
 
             if (primitive->mColors) {
                 colors[1] = colors[2];
+            }
+            if (primitive->mTexCoords) {
+            	texcoords[1] = texcoords[2];
             }
         }
 
@@ -1213,11 +1275,17 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
 
         RGLColorf colors[3];
         RGLVectorf points[3];
+        RGLVectorf texcoords[3];
 
         if (primitive->mColors) {
             colors[0] = primitive->mColors[0];
             colors[1] = primitive->mColors[1];
             trianglePrimitive.mColors = &(colors[0]);
+        }
+        if (primitive->mTexCoords) {
+        	texcoords[0] = primitive->mTexCoords[0];
+        	texcoords[1] = primitive->mTexCoords[1];
+            trianglePrimitive.mTexCoords = &(texcoords[0]);
         }
 
         trianglePrimitive.mPoints = &(points[0]);
@@ -1231,6 +1299,9 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             if (primitive->mColors) {
                 colors[2] = primitive->mColors[i];
             }
+            if (primitive->mTexCoords) {
+            	texcoords[2] = primitive->mTexCoords[i];
+            }
 
             drawTriangle(fragments, trianglePrimitive);
             perFragmentOperations(fragments);
@@ -1241,6 +1312,10 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             if (primitive->mColors) {
                 colors[0] = colors[1];
                 colors[1] = colors[2];
+            }
+            if (primitive->mTexCoords) {
+            	texcoords[0] = texcoords[1];
+            	texcoords[1] = texcoords[2];
             }
         }
 
@@ -1273,9 +1348,37 @@ bool RGLInterfaceImplV_1_0::depthTest(
     return result;
 }
 
+void RGLInterfaceImplV_1_0::applyTextureMapping(
+    RGLInterfaceImplV_1_0Fragments &fragments)
+{
+	RGLVectorf result;
+	RGLInterfaceImplV_1_0Texture * texture = getCurrentTexture();
+	if (mState->mFeature.mTexture2D && texture) {
+		for (int i = 0; i < fragments.count(); ++i) {
+			RGLInterfaceImplV_1_0Fragments::Fragment &fragment = fragments.data()[i];
+			if (fragment.mValid) {
+				nearestFilter(texture, fragment.mTexCoords.x(), fragment.mTexCoords.y(), result);
+
+				switch (mState->mTextureUnits[mState->mCurrentActiveTexture].mMode)
+				{
+				case GL_REPLACE:
+					fragment.mColor = result;
+					break;
+
+				case GL_MODULATE:
+					fragment.mColor *= result;
+					break;
+				}
+			}
+		}
+	}
+}
+
 void RGLInterfaceImplV_1_0::perFragmentOperations(
     RGLInterfaceImplV_1_0Fragments &fragments)
 {
+	applyTextureMapping(fragments);
+
     bool depthTestResult = true;
 
     for (int i = 0; i < fragments.count(); ++i) {
@@ -1425,6 +1528,16 @@ void RGLInterfaceImplV_1_0::texEnv(GLenum target, GLenum pname, const GLint *par
     }
 }
 
+RGLInterfaceImplV_1_0Texture *RGLInterfaceImplV_1_0::getCurrentTexture()
+{
+	RGLInterfaceImplV_1_0Texture * texture = 0;
+	TextureListIter iter = mState->mTextures.find(mState->mTextureUnits[mState->mCurrentActiveTexture].mBoundTexture);
+	if (iter != mState->mTextures.end()) {
+		texture = iter->second;
+	}
+	return texture;
+}
+
 void RGLInterfaceImplV_1_0::texImage2D(GLenum target, GLint level, GLint internalformat,
                                        GLsizei width, GLsizei height, GLint border,
                                        GLenum format, GLenum type, const GLvoid *pixels)
@@ -1440,25 +1553,25 @@ void RGLInterfaceImplV_1_0::texImage2D(GLenum target, GLint level, GLint interna
     RGLASSERT_WE((width & (width - 1)) == 0, GL_INVALID_VALUE);
     RGLASSERT_WE((height & (height - 1)) == 0, GL_INVALID_VALUE);
 
-    TextureListIter iter = mState->mTextures.find(mState->mTextureUnits[mState->mCurrentActiveTexture].mBoundTexture);
-    if (iter != mState->mTextures.end()) {
-        iter->second->mTarget = target;
-        iter->second->mLevel = level;
-        iter->second->mInternalformat = internalformat;
-        iter->second->mWidth = width;
-        iter->second->mHeight = height;
-        iter->second->mBorder = border;
-        iter->second->mFormat = format;
-        iter->second->mType = type;
+    RGLInterfaceImplV_1_0Texture *texture = getCurrentTexture();
+    if (texture) {
+    	texture->mTarget = target;
+    	texture->mLevel = level;
+    	texture->mInternalformat = internalformat;
+    	texture->mWidth = width;
+    	texture->mHeight = height;
+    	texture->mBorder = border;
+    	texture->mFormat = format;
+    	texture->mType = type;
 
-        delete [] iter->second->mPixels;
-        iter->second->mPixels = 0;
+        delete [] texture->mPixels;
+        texture->mPixels = 0;
 
         switch (format) {
         case GL_RGBA: {
             const int size = 4 * width * height;
-            iter->second->mPixels = new GLubyte[size];
-            memcpy(iter->second->mPixels, pixels, size);
+            texture->mPixels = new GLubyte[size];
+            memcpy(texture->mPixels, pixels, size);
         }
         break;
 
@@ -1474,9 +1587,8 @@ void RGLInterfaceImplV_1_0::texParameter(GLenum target, GLenum pname, const GLin
 {
     RGLASSERT_WE(target == GL_TEXTURE_2D, GL_INVALID_VALUE);
 
-    TextureListIter iter = mState->mTextures.find(mState->mTextureUnits[mState->mCurrentActiveTexture].mBoundTexture);
-    if (iter != mState->mTextures.end()) {
-        RGLInterfaceImplV_1_0Texture * texture = iter->second;
+    RGLInterfaceImplV_1_0Texture *texture = getCurrentTexture();
+    if (texture) {
         switch (pname) {
         case GL_TEXTURE_WRAP_S:
             texture->mWrapS = *params;

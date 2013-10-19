@@ -199,6 +199,7 @@ public:
     GLfloat mClearStencil;
     RGLColorf mCurrentColor;
     RGLVectorf mCurrentNormal;
+    RGLVectorf mCurrentTexCoord;
     GLint mViewportX;
     GLint mViewportY;
     GLint mViewportWidth;
@@ -262,6 +263,7 @@ public:
 
         RGLVector2Di mPoint;
         RGLColorf mColor;
+        RGLVectorf mTexCoords;
         GLfloat mDepth;
         GLfloat mCoverage;
         bool mValid;
@@ -410,11 +412,13 @@ protected:
     void applyLighting(RGLInterfaceImplV_1_0Primitive *primitive, RGLColorf * colors);
     void clipAndRasterization(RGLInterfaceImplV_1_0Primitive *primitive);
     void perFragmentOperations(RGLInterfaceImplV_1_0Fragments &fragments);
-
+    void applyTextureMapping(RGLInterfaceImplV_1_0Fragments &fragments);
     OutCode computeOutCode(GLfloat x, GLfloat y,
                            GLfloat xmin, GLfloat ymin,
                            GLfloat xmax, GLfloat ymax);
     int clipLine(RGLVectorf &p1, RGLVectorf &p2);
+
+    RGLInterfaceImplV_1_0Texture *getCurrentTexture();
 
     bool depthTest(const RGLInterfaceImplV_1_0Fragments::Fragment &fragment);
     void nearestFilter(RGLInterfaceImplV_1_0Texture * texture,

@@ -5,6 +5,7 @@ bin_PROGRAMS = guitest \
                colors \
                depthtest \
                lighting \
+               texturing \
                primitives \
                transformations \
 
@@ -40,6 +41,7 @@ guitest_SOURCES = ../examples/guitest.cpp
 colors_SOURCES = ../examples/colors.cpp
 depthtest_SOURCES = ../examples/depthtest.cpp
 lighting_SOURCES = ../examples/lighting.cpp
+texturing_SOURCES = ../examples/texturing.cpp
 primitives_SOURCES = ../examples/primitives.cpp
 transformations_SOURCES = ../examples/transformations.cpp
 
@@ -97,6 +99,9 @@ depthtest: $(depthtest_SOURCES) $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
 lighting: $(lighting_SOURCES)  $(lib_PROGRAMS)
+	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
+
+texturing: $(texturing_SOURCES)  $(lib_PROGRAMS)
 	$(CXX) -o $@ $< $(CXXFLAGS) $(INCLUDES) $(LIBS)
 
 clean:

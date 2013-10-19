@@ -328,6 +328,14 @@ inline GLfloat interpolate(GLfloat t, GLfloat start, GLfloat end)
     return (start * (1.0f - t) + t * end);
 }
 
+inline RGLVectorf interpolate(GLfloat t, RGLVectorf const & start, RGLVectorf const & end)
+{
+	return RGLVectorf(interpolate(t, start.r(), end.r()),
+	          	  	  interpolate(t, start.g(), end.g()),
+	          	  	  interpolate(t, start.b(), end.b()),
+	          	  	  interpolate(t, start.a(), end.a()));
+}
+
 inline bool rglFuncEqual(const GLfloat &v1, const GLfloat &v2)
 {
     return fabsf(v1 - v2) < std::numeric_limits<GLfloat>().epsilon();
