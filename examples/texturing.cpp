@@ -7,12 +7,15 @@
 #include "EGL/egl.h"
 
 #include <math.h>
+#include <string.h>
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 #endif
 
 static const int TimerDelay = 200;
+
+GLubyte texData[16* 16 * 4];
 
 class MyWindow;
 
@@ -109,12 +112,18 @@ public:
         GLfloat lSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
         GLfloat lPosition[] = {0.0f, 0.0f, 2.0f, 0.0f};
 
-        GLubyte texData[] = {
+        GLubyte texColors[] = {
         		0xFF, 0x00, 0x00, 0xFF,
         		0x00, 0xFF, 0x00, 0xFF,
         		0x00, 0x00, 0xFF, 0xFF,
-        		0xFF, 0x00, 0xFF, 0xFF
+        		0xFF, 0x00, 0xFF, 0xFF,
+        		0xFF, 0xFF, 0x00, 0xFF,
+        		0x00, 0xFF, 0xFF, 0xFF
         };
+
+        for (int i=0; i<16*16; ++i) {
+            memcpy(texData + i*4, texColors + (i%(sizeof(texColors)/sizeof(texColors[0])/4)) * 4, 4);
+        }
 
         createShapes();
 
@@ -134,7 +143,7 @@ public:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
