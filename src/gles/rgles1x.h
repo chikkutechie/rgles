@@ -4,10 +4,10 @@
 
 #include "GLES/gl.h"
 
-class RGLInterface
+class RGles1x
 {
 protected:
-    static RGLInterface * mAPI;
+    static RGles1x * mAPI;
 
 public:
     class InitParam
@@ -25,12 +25,12 @@ public:
     };
 
 public:
-    static RGLInterface *instance(const char *hint = 0) {
+    static RGles1x *instance(const char *hint = 0) {
         return mAPI;
     }
 
 public:
-    virtual ~RGLInterface()
+    virtual ~RGles1x()
     {}
 
     /* transformations */

@@ -1,6 +1,6 @@
 
 #include "EGL/egl.h"
-#include "rglinterfaceimplV_1_0.h"
+#include "rgles1ximpl.h"
 
 #include "GUI/rwin.h"
 #include "GUI/rapp.h"
@@ -44,8 +44,8 @@ extern "C" {
     class REGLContext_ES_1
     {
     public:
-        RGLInterfaceImplV_1_0 mAPI;
-        RGLInterfaceImplV_1_0State mGLState;
+        RGles1xImpl mAPI;
+        RGles1xImplState mGLState;
     };
 
     class REGLConfig
@@ -239,7 +239,7 @@ extern "C" {
         REGLContext_ES_1 * context = eglState->mContextList[ctx - 1];
         REGLSurfaceData * surface = eglState->mSurfaceList[draw - 1];
 
-        RGLInterface::InitParam param;
+        RGles1x::InitParam param;
         param.mHasDepth = true;
         param.mWidth = surface->mWidth;
         param.mHeight = surface->mHeight;

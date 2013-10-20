@@ -13,14 +13,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\egl\regl.cpp" />
     <ClCompile Include="..\..\src\gles\rgl.cpp" />
-    <ClCompile Include="..\..\src\gles\rglinterfaceimplV_1_0.cpp" />
+    <ClCompile Include="..\..\src\gles\rgles1ximpl.cpp" />
     <ClCompile Include="..\..\src\gles\rglmatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\inc\EGL\egl.h" />
     <ClInclude Include="..\..\inc\GLES\gl.h" />
-    <ClInclude Include="..\..\src\gles\rglinterface.h" />
-    <ClInclude Include="..\..\src\gles\rglinterfaceimplV_1_0.h" />
+    <ClInclude Include="..\..\src\gles\rgles1x.h" />
+    <ClInclude Include="..\..\src\gles\rgles1ximpl.h" />
     <ClInclude Include="..\..\src\gles\rglmatrix.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

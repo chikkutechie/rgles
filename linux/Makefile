@@ -23,7 +23,7 @@ librgl_a_SOURCES = \
 librgl_a_OBJS = \
              regl.o \
              rgl.o \
-             rglinterfaceimplV_1_0.o \
+             rgles1ximpl.o \
              rglmatrix.o
 
 librgui_a_SOURCES = \
@@ -70,7 +70,7 @@ regl.o : ../src/egl/regl.cpp
 rgl.o : ../src/gles/rgl.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $<
 
-rglinterfaceimplV_1_0.o : ../src/gles/rglinterfaceimplV_1_0.cpp
+rgles1ximpl.o : ../src/gles/rgles1ximpl.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $<
 
 rglmatrix.o : ../src/gles/rglmatrix.cpp

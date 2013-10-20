@@ -4,7 +4,7 @@
 
 #include "rglutils.h"
 #include "rglmatrix.h"
-#include "rglinterface.h"
+#include "rgles1x.h"
 
 #include <vector>
 #include <map>
@@ -12,10 +12,10 @@
 #define GL_MAX_LIGHT_UNITS      1
 #define GL_MAX_TEXTURE_UNITS    1
 
-class RGLInterfaceImplV_1_0TextureUnit
+class RGles1xImplTextureUnit
 {
 public:
-    RGLInterfaceImplV_1_0TextureUnit()
+    RGles1xImplTextureUnit()
         : mMode(GL_MODULATE),
           mBoundTexture(0)
     {}
@@ -25,10 +25,10 @@ public:
     GLuint mBoundTexture;
 };
 
-class RGLInterfaceImplV_1_0Texture
+class RGles1xImplTexture
 {
 public:
-    RGLInterfaceImplV_1_0Texture()
+    RGles1xImplTexture()
         : mTarget(GL_TEXTURE_2D),
           mLevel(0),
           mPixels(0),
@@ -53,14 +53,14 @@ public:
     GLint mMagnification;
 };
 
-typedef std::map<GLuint, RGLInterfaceImplV_1_0Texture*> TextureList;
+typedef std::map<GLuint, RGles1xImplTexture*> TextureList;
 typedef TextureList::iterator TextureListIter;
 typedef TextureList::const_iterator TextureListConstIter;
 
-class RGLInterfaceImplV_1_0Light
+class RGles1xImplLight
 {
 public:
-    RGLInterfaceImplV_1_0Light()
+    RGles1xImplLight()
         : mSpotExponent(0.0f),
           mSpotCutoff(180.0f),
           mConstantAttenuation(1.0f),
@@ -85,10 +85,10 @@ public:
     RGLVectorf mSpotDirection;
 };
 
-class RGLInterfaceImplV_1_0Material
+class RGles1xImplMaterial
 {
 public:
-    RGLInterfaceImplV_1_0Material()
+    RGles1xImplMaterial()
         : mAmbient(0.2f, 0.2f, 0.2f, 1.0f),
           mDiffuse(0.8f, 0.8f, 0.8f, 1.0f),
           mSpecular(0.0f, 0.0f, 0.0f, 1.0f),
@@ -101,10 +101,10 @@ public:
     RGLColorf mEmissive;
 };
 
-class RGLInterfaceImplV_1_0VertexData
+class RGles1xImplVertexData
 {
 public:
-    RGLInterfaceImplV_1_0VertexData()
+    RGles1xImplVertexData()
         : mSize(3),
           mPointer(0)
     {}
@@ -115,10 +115,10 @@ public:
     const GLvoid *mPointer;
 };
 
-class RGLInterfaceImplV_1_0Buffers
+class RGles1xImplBuffers
 {
 public:
-    RGLInterfaceImplV_1_0Buffers()
+    RGles1xImplBuffers()
         : mColor(0),
           mDepth(0),
           mStencil(0)
@@ -129,10 +129,10 @@ public:
     GLfloat *mStencil;
 };
 
-class RGLInterfaceImplV_1_0Feature
+class RGles1xImplFeature
 {
 public:
-    RGLInterfaceImplV_1_0Feature()
+    RGles1xImplFeature()
         : mDepthTest(false),
           mVertexArray(false),
           mColorArray(false),
@@ -157,20 +157,20 @@ public:
     bool mTexture2D;
 };
 
-class RGLInterfaceImplV_1_0Funcs
+class RGles1xImplFuncs
 {
 public:
-    RGLInterfaceImplV_1_0Funcs() {
+    RGles1xImplFuncs() {
         mDepthFunc = rglFuncLess;
     }
 
     bool (*mDepthFunc)(const GLfloat &, const GLfloat &);
 };
 
-class RGLInterfaceImplV_1_0State
+class RGles1xImplState
 {
 public:
-    RGLInterfaceImplV_1_0State()
+    RGles1xImplState()
         : mClearColor(0.0f, 0.0f, 0.0f, 1.0f),
           mClearDepth(0.0f),
           mClearStencil(0.0f),
@@ -211,29 +211,29 @@ public:
     GLfloat mDepthRange[2];
     RGLMatrix mProjection;
     RGLMatrix mModelview;
-    RGLInterfaceImplV_1_0VertexData mVertexData;
-    RGLInterfaceImplV_1_0VertexData mColorData;
-    RGLInterfaceImplV_1_0VertexData mNormalData;
-    RGLInterfaceImplV_1_0VertexData mTexCoordData;
-    RGLInterfaceImplV_1_0Buffers mBuffers;
-    RGLInterfaceImplV_1_0Feature mFeature;
-    RGLInterfaceImplV_1_0Funcs mFuncs;
-    RGLInterfaceImplV_1_0Material mMaterial;
-    RGLInterfaceImplV_1_0Light mLights[GL_MAX_LIGHT_UNITS];
+    RGles1xImplVertexData mVertexData;
+    RGles1xImplVertexData mColorData;
+    RGles1xImplVertexData mNormalData;
+    RGles1xImplVertexData mTexCoordData;
+    RGles1xImplBuffers mBuffers;
+    RGles1xImplFeature mFeature;
+    RGles1xImplFuncs mFuncs;
+    RGles1xImplMaterial mMaterial;
+    RGles1xImplLight mLights[GL_MAX_LIGHT_UNITS];
     TextureList mTextures;
     GLuint mActiveTextures[GL_MAX_TEXTURE_UNITS];
     GLuint mCurrentActiveTexture;
-    RGLInterfaceImplV_1_0TextureUnit mTextureUnits[GL_MAX_TEXTURE_UNITS];
+    RGles1xImplTextureUnit mTextureUnits[GL_MAX_TEXTURE_UNITS];
 };
 
-class RGLInterfaceImplV_1_0Primitive
+class RGles1xImplPrimitive
 {
 private:
-    RGLInterfaceImplV_1_0Primitive(RGLInterfaceImplV_1_0Primitive const &);
-    RGLInterfaceImplV_1_0Primitive& operator=(RGLInterfaceImplV_1_0Primitive const &);
+    RGles1xImplPrimitive(RGles1xImplPrimitive const &);
+    RGles1xImplPrimitive& operator=(RGles1xImplPrimitive const &);
 
 public:
-    RGLInterfaceImplV_1_0Primitive()
+    RGles1xImplPrimitive()
         : mCount(0),
           mPoints(0),
           mColors(0),
@@ -249,7 +249,7 @@ public:
     RGLVectorf *mTexCoords;
 };
 
-class RGLInterfaceImplV_1_0Fragments
+class RGles1xImplFragments
 {
 public:
     class Fragment
@@ -269,12 +269,12 @@ public:
         bool mValid;
     };
 
-    RGLInterfaceImplV_1_0Fragments(int width, int height)
+    RGles1xImplFragments(int width, int height)
         : mFragments(width * height),
           mWidth(width)
     {}
 
-    ~RGLInterfaceImplV_1_0Fragments()
+    ~RGles1xImplFragments()
     {}
 
     void add(Fragment const &fragment) {
@@ -309,7 +309,7 @@ private:
     int mWidth;
 };
 
-class RGLInterfaceImplV_1_0: public RGLInterface
+class RGles1xImpl: public RGles1x
 {
 protected:
 
@@ -323,7 +323,7 @@ protected:
     };
 
 public:
-    RGLInterfaceImplV_1_0();
+    RGles1xImpl();
 
     /* transformations */
     virtual void loadIdentity();
@@ -400,33 +400,33 @@ public:
     void initialize(InitParam const &param, void * state);
 
 protected:
-    void drawPoint(RGLInterfaceImplV_1_0Fragments &fragments,
-                   RGLInterfaceImplV_1_0Primitive const & primitive);
-    void drawLine(RGLInterfaceImplV_1_0Fragments &fragments,
-                  RGLInterfaceImplV_1_0Primitive const & primitive);
-    void drawTriangle(RGLInterfaceImplV_1_0Fragments &fragments,
-                      RGLInterfaceImplV_1_0Primitive const & primitive);
+    void drawPoint(RGles1xImplFragments &fragments,
+                   RGles1xImplPrimitive const & primitive);
+    void drawLine(RGles1xImplFragments &fragments,
+                  RGles1xImplPrimitive const & primitive);
+    void drawTriangle(RGles1xImplFragments &fragments,
+                      RGles1xImplPrimitive const & primitive);
 
-    void perVertexOperations(RGLInterfaceImplV_1_0Primitive *primitive);
+    void perVertexOperations(RGles1xImplPrimitive *primitive);
     bool enabledLighting();
-    void applyLighting(RGLInterfaceImplV_1_0Primitive *primitive, RGLColorf * colors);
-    void clipAndRasterization(RGLInterfaceImplV_1_0Primitive *primitive);
-    void perFragmentOperations(RGLInterfaceImplV_1_0Fragments &fragments);
-    void applyTextureMapping(RGLInterfaceImplV_1_0Fragments &fragments);
+    void applyLighting(RGles1xImplPrimitive *primitive, RGLColorf * colors);
+    void clipAndRasterization(RGles1xImplPrimitive *primitive);
+    void perFragmentOperations(RGles1xImplFragments &fragments);
+    void applyTextureMapping(RGles1xImplFragments &fragments);
     OutCode computeOutCode(GLfloat x, GLfloat y,
                            GLfloat xmin, GLfloat ymin,
                            GLfloat xmax, GLfloat ymax);
     int clipLine(RGLVectorf &p1, RGLVectorf &p2);
 
-    RGLInterfaceImplV_1_0Texture *getCurrentTexture();
+    RGles1xImplTexture *getCurrentTexture();
 
-    bool depthTest(const RGLInterfaceImplV_1_0Fragments::Fragment &fragment);
-    void nearestFilter(RGLInterfaceImplV_1_0Texture * texture,
+    bool depthTest(const RGles1xImplFragments::Fragment &fragment);
+    void nearestFilter(RGles1xImplTexture * texture,
                        GLfloat s, GLfloat t, RGLColorf & result);
-    void extractRGBA(RGLInterfaceImplV_1_0Texture * texture,
+    void extractRGBA(RGles1xImplTexture * texture,
                      GLint row, GLint col, RGLColorf & result);
 protected:
-    RGLInterfaceImplV_1_0State * mState;
+    RGles1xImplState * mState;
 };
 
 #endif

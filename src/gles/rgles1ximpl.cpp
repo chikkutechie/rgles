@@ -1,25 +1,25 @@
 
-#include "rglinterfaceimplV_1_0.h"
+#include "rgles1ximpl.h"
 
 #include <iostream>
 #include <math.h>
 #include <string.h>
 
-RGLInterface * RGLInterface::mAPI = 0;
+RGles1x * RGles1x::mAPI = 0;
 
-RGLInterfaceImplV_1_0::RGLInterfaceImplV_1_0()
+RGles1xImpl::RGles1xImpl()
 {}
 
-void RGLInterfaceImplV_1_0::matrixMode(GLenum mode)
+void RGles1xImpl::matrixMode(GLenum mode)
 {
     mState->mMatrixMode = mode;
 }
 
-void RGLInterfaceImplV_1_0::initialize(InitParam const &param, void * state)
+void RGles1xImpl::initialize(InitParam const &param, void * state)
 {
-    mState = (RGLInterfaceImplV_1_0State *)state;
+    mState = (RGles1xImplState *)state;
 
-    RGLInterface::mAPI = this;
+    RGles1x::mAPI = this;
 
     bool reinitialization = false;
 
@@ -60,7 +60,7 @@ void RGLInterfaceImplV_1_0::initialize(InitParam const &param, void * state)
     }
 }
 
-void RGLInterfaceImplV_1_0::loadMatrix(const GLfloat m[16])
+void RGles1xImpl::loadMatrix(const GLfloat m[16])
 {
     switch (mState->mMatrixMode) {
     case GL_PROJECTION:
@@ -73,7 +73,7 @@ void RGLInterfaceImplV_1_0::loadMatrix(const GLfloat m[16])
     }
 }
 
-void RGLInterfaceImplV_1_0::frustum(GLfloat leftValue, GLfloat rightValue,
+void RGles1xImpl::frustum(GLfloat leftValue, GLfloat rightValue,
                                     GLfloat bottomValue, GLfloat topValue,
                                     GLfloat nearValue, GLfloat farValue)
 {
@@ -115,7 +115,7 @@ void RGLInterfaceImplV_1_0::frustum(GLfloat leftValue, GLfloat rightValue,
     }
 }
 
-void RGLInterfaceImplV_1_0::ortho(GLfloat leftValue, GLfloat rightValue,
+void RGles1xImpl::ortho(GLfloat leftValue, GLfloat rightValue,
                                   GLfloat bottomValue, GLfloat topValue,
                                   GLfloat nearValue, GLfloat farValue)
 {
@@ -157,7 +157,7 @@ void RGLInterfaceImplV_1_0::ortho(GLfloat leftValue, GLfloat rightValue,
     }
 }
 
-void RGLInterfaceImplV_1_0::scale(GLfloat sx, GLfloat sy, GLfloat sz)
+void RGles1xImpl::scale(GLfloat sx, GLfloat sy, GLfloat sz)
 {
     GLfloat sm[4 * 4] = {
         sx, 0.0f, 0.0f, 0.0f,
@@ -183,7 +183,7 @@ void RGLInterfaceImplV_1_0::scale(GLfloat sx, GLfloat sy, GLfloat sz)
     }
 }
 
-void RGLInterfaceImplV_1_0::translate(GLfloat tx, GLfloat ty, GLfloat tz)
+void RGles1xImpl::translate(GLfloat tx, GLfloat ty, GLfloat tz)
 {
     GLfloat tm[4 * 4] = {
         1.0f, 0.0f, 0.0f, 0.0f,
@@ -209,7 +209,7 @@ void RGLInterfaceImplV_1_0::translate(GLfloat tx, GLfloat ty, GLfloat tz)
     }
 }
 
-void RGLInterfaceImplV_1_0::rotate(GLfloat angle, GLfloat ax, GLfloat ay,
+void RGles1xImpl::rotate(GLfloat angle, GLfloat ax, GLfloat ay,
                                    GLfloat az)
 {
     RGLMatrix m;
@@ -254,7 +254,7 @@ void RGLInterfaceImplV_1_0::rotate(GLfloat angle, GLfloat ax, GLfloat ay,
     }
 }
 
-void RGLInterfaceImplV_1_0::loadIdentity()
+void RGles1xImpl::loadIdentity()
 {
     switch (mState->mMatrixMode) {
     case GL_PROJECTION:
@@ -267,7 +267,7 @@ void RGLInterfaceImplV_1_0::loadIdentity()
     }
 }
 
-void RGLInterfaceImplV_1_0::enable(GLenum cap)
+void RGles1xImpl::enable(GLenum cap)
 {
     switch (cap) {
     case GL_TEXTURE_2D:
@@ -308,7 +308,7 @@ void RGLInterfaceImplV_1_0::enable(GLenum cap)
     }
 }
 
-void RGLInterfaceImplV_1_0::disable(GLenum cap)
+void RGles1xImpl::disable(GLenum cap)
 {
     switch (cap) {
     case GL_TEXTURE_2D:
@@ -350,7 +350,7 @@ void RGLInterfaceImplV_1_0::disable(GLenum cap)
     }
 }
 
-void RGLInterfaceImplV_1_0::depthFunc(GLenum func)
+void RGles1xImpl::depthFunc(GLenum func)
 {
     switch (func) {
     case GL_ALWAYS:
@@ -372,16 +372,16 @@ void RGLInterfaceImplV_1_0::depthFunc(GLenum func)
 }
 
 /* flush operations */
-void RGLInterfaceImplV_1_0::flush()
+void RGles1xImpl::flush()
 {}
 
-void RGLInterfaceImplV_1_0::finish()
+void RGles1xImpl::finish()
 {
     flush();
 }
 
 /* retrieve color buffer */
-void RGLInterfaceImplV_1_0::readPixels(GLint x, GLint y, GLsizei width,
+void RGles1xImpl::readPixels(GLint x, GLint y, GLsizei width,
                                        GLsizei height, GLenum format,
                                        GLenum type, GLvoid *pixels,
                                        bool originTopLeft)
@@ -432,18 +432,18 @@ void RGLInterfaceImplV_1_0::readPixels(GLint x, GLint y, GLsizei width,
     return;
 }
 
-void RGLInterfaceImplV_1_0::normal(GLfloat nx, GLfloat ny, GLfloat nz)
+void RGles1xImpl::normal(GLfloat nx, GLfloat ny, GLfloat nz)
 {
     mState->mCurrentNormal.setX(nx);
     mState->mCurrentNormal.setY(ny);
     mState->mCurrentNormal.setZ(nz);
 }
 
-void RGLInterfaceImplV_1_0::light(GLenum light, GLenum pname, const GLfloat *params)
+void RGles1xImpl::light(GLenum light, GLenum pname, const GLfloat *params)
 {
     RGLASSERT_WE((light - GL_LIGHT0) < GL_MAX_LIGHT_UNITS, GL_INVALID_ENUM);
 
-    RGLInterfaceImplV_1_0Light & l = mState->mLights[light - GL_LIGHT0];
+    RGles1xImplLight & l = mState->mLights[light - GL_LIGHT0];
 
     switch (pname) {
     case GL_AMBIENT:
@@ -493,7 +493,7 @@ void RGLInterfaceImplV_1_0::light(GLenum light, GLenum pname, const GLfloat *par
 
 }
 
-void RGLInterfaceImplV_1_0::material(GLenum face, GLenum pname, const GLfloat *params)
+void RGles1xImpl::material(GLenum face, GLenum pname, const GLfloat *params)
 {
     RGLASSERT_WE(face == GL_FRONT_AND_BACK, GL_INVALID_VALUE);
 
@@ -521,7 +521,7 @@ void RGLInterfaceImplV_1_0::material(GLenum face, GLenum pname, const GLfloat *p
 }
 
 
-void RGLInterfaceImplV_1_0::texCoordPointer(GLint size, GLenum type, GLsizei stride,
+void RGles1xImpl::texCoordPointer(GLint size, GLenum type, GLsizei stride,
         const GLvoid *pointer)
 {
     RGLASSERT_WE(size == 2, GL_INVALID_VALUE);
@@ -534,7 +534,7 @@ void RGLInterfaceImplV_1_0::texCoordPointer(GLint size, GLenum type, GLsizei str
     mState->mTexCoordData.mPointer = pointer;
 }
 
-void RGLInterfaceImplV_1_0::normalPointer(GLenum type, GLsizei stride,
+void RGles1xImpl::normalPointer(GLenum type, GLsizei stride,
         const GLvoid *pointer)
 {
     RGLASSERT_WE(type == GL_FLOAT, GL_INVALID_VALUE);
@@ -547,7 +547,7 @@ void RGLInterfaceImplV_1_0::normalPointer(GLenum type, GLsizei stride,
     mState->mNormalData.mPointer = pointer;
 }
 
-void RGLInterfaceImplV_1_0::colorPointer(GLint size, GLenum type,
+void RGles1xImpl::colorPointer(GLint size, GLenum type,
         GLsizei stride,
         const GLvoid *pointer)
 {
@@ -561,7 +561,7 @@ void RGLInterfaceImplV_1_0::colorPointer(GLint size, GLenum type,
     mState->mColorData.mPointer = pointer;
 }
 
-void RGLInterfaceImplV_1_0::vertexPointer(GLint size, GLenum type,
+void RGles1xImpl::vertexPointer(GLint size, GLenum type,
         GLsizei stride, const GLvoid *pointer)
 {
     RGLASSERT_WE(size == 2 || size == 3, GL_INVALID_VALUE);
@@ -631,7 +631,7 @@ RGLVectorf *readVertexData(const GLvoid *pointer,
     return points;
 }
 
-void RGLInterfaceImplV_1_0::drawArrays(GLenum mode, GLint first,
+void RGles1xImpl::drawArrays(GLenum mode, GLint first,
                                        GLsizei count)
 {
     if (!mState->mVertexData.mPointer ||
@@ -639,7 +639,7 @@ void RGLInterfaceImplV_1_0::drawArrays(GLenum mode, GLint first,
         return;
     }
 
-    RGLInterfaceImplV_1_0Primitive primitive;
+    RGles1xImplPrimitive primitive;
     RGLColorf *colors = 0;
     RGLVectorf *normals = 0;
     RGLVectorf *texcoords = 0;
@@ -690,7 +690,7 @@ void RGLInterfaceImplV_1_0::drawArrays(GLenum mode, GLint first,
 }
 
 /* clear operations */
-void RGLInterfaceImplV_1_0::clearColor(GLclampf r, GLclampf g, GLclampf b,
+void RGles1xImpl::clearColor(GLclampf r, GLclampf g, GLclampf b,
                                        GLclampf a)
 {
     mState->mClearColor.setR(clamp(r));
@@ -699,7 +699,7 @@ void RGLInterfaceImplV_1_0::clearColor(GLclampf r, GLclampf g, GLclampf b,
     mState->mClearColor.setA(clamp(a));
 }
 
-void RGLInterfaceImplV_1_0::clear(GLbitfield mask)
+void RGles1xImpl::clear(GLbitfield mask)
 {
     for (int i = 0; i < mState->mWidth * mState->mHeight; ++i) {
         if (mask & GL_COLOR_BUFFER_BIT) {
@@ -717,7 +717,7 @@ void RGLInterfaceImplV_1_0::clear(GLbitfield mask)
 }
 
 /* color settings */
-void RGLInterfaceImplV_1_0::color(GLfloat r, GLfloat g, GLfloat b,
+void RGles1xImpl::color(GLfloat r, GLfloat g, GLfloat b,
                                   GLfloat a)
 {
     mState->mCurrentColor.setR(clamp(r));
@@ -726,7 +726,7 @@ void RGLInterfaceImplV_1_0::color(GLfloat r, GLfloat g, GLfloat b,
     mState->mCurrentColor.setA(clamp(a));
 }
 
-void RGLInterfaceImplV_1_0::viewport(int x, int y, int width, int height)
+void RGles1xImpl::viewport(int x, int y, int width, int height)
 {
     mState->mViewportX = x;
     mState->mViewportY = y;
@@ -734,16 +734,16 @@ void RGLInterfaceImplV_1_0::viewport(int x, int y, int width, int height)
     mState->mViewportHeight = height;
 }
 
-void RGLInterfaceImplV_1_0::drawPoint(RGLInterfaceImplV_1_0Fragments
+void RGles1xImpl::drawPoint(RGles1xImplFragments
                                       &fragments,
-                                      RGLInterfaceImplV_1_0Primitive const & primitive)
+                                      RGles1xImplPrimitive const & primitive)
 {
     const RGLVectorf &p = primitive.mPoints[0];
     GLfloat depth = p.z();
     if (p.x() >= 0 && p.y() >= 0 &&
             p.x() < mState->mWidth && p.y() < mState->mHeight &&
             depth >= mState->mDepthRange[0] && depth <= mState->mDepthRange[1]) {
-        RGLInterfaceImplV_1_0Fragments::Fragment fragment;
+        RGles1xImplFragments::Fragment fragment;
         if (primitive.mColors) {
             fragment.mColor = primitive.mColors[0];
         } else {
@@ -765,9 +765,9 @@ void RGLInterfaceImplV_1_0::drawPoint(RGLInterfaceImplV_1_0Fragments
     }
 }
 
-void RGLInterfaceImplV_1_0::drawLine(RGLInterfaceImplV_1_0Fragments
+void RGles1xImpl::drawLine(RGles1xImplFragments
                                      &fragments,
-                                     RGLInterfaceImplV_1_0Primitive const & primitive)
+                                     RGles1xImplPrimitive const & primitive)
 {
     RGLVectorf p1 = primitive.mPoints[0];
     RGLVectorf p2 = primitive.mPoints[1];
@@ -781,7 +781,7 @@ void RGLInterfaceImplV_1_0::drawLine(RGLInterfaceImplV_1_0Fragments
     float tInc = 1.0f / (lineLength(p1, p2) + 4);
 
     for (; t <= 1.0f; t += tInc) {
-        RGLInterfaceImplV_1_0Primitive pointPrimitive;
+        RGles1xImplPrimitive pointPrimitive;
         RGLVectorf point(interpolate(t, p1, p2));
 
         pointPrimitive.mCount = 1;
@@ -803,9 +803,9 @@ void RGLInterfaceImplV_1_0::drawLine(RGLInterfaceImplV_1_0Fragments
 }
 
 /* This one of the most worst way to render a triangle, but performance is not our aim */
-void RGLInterfaceImplV_1_0::drawTriangle(RGLInterfaceImplV_1_0Fragments
+void RGles1xImpl::drawTriangle(RGles1xImplFragments
         &fragments,
-        RGLInterfaceImplV_1_0Primitive const & primitive)
+        RGles1xImplPrimitive const & primitive)
 {
     const RGLVectorf &p1 = primitive.mPoints[0];
     const RGLVectorf &p2 = primitive.mPoints[1];
@@ -817,7 +817,7 @@ void RGLInterfaceImplV_1_0::drawTriangle(RGLInterfaceImplV_1_0Fragments
     float tInc = 0.5f / lineLength(p2, p3);
 
     for (; t <= 1.0f; t += tInc) {
-        RGLInterfaceImplV_1_0Primitive linePrimitive;
+        RGles1xImplPrimitive linePrimitive;
         RGLVectorf points[2] = {p1, interpolate(t, p2, p3)};
 
         linePrimitive.mCount = 2;
@@ -849,8 +849,8 @@ void RGLInterfaceImplV_1_0::drawTriangle(RGLInterfaceImplV_1_0Fragments
     }
 }
 
-void RGLInterfaceImplV_1_0::perVertexOperations(
-    RGLInterfaceImplV_1_0Primitive *primitive)
+void RGles1xImpl::perVertexOperations(
+    RGles1xImplPrimitive *primitive)
 {
     /* apply model view transformations */
     for (int i = 0; i < primitive->mCount; ++i) {
@@ -915,7 +915,7 @@ void RGLInterfaceImplV_1_0::perVertexOperations(
     }
 }
 
-bool RGLInterfaceImplV_1_0::enabledLighting()
+bool RGles1xImpl::enabledLighting()
 {
     bool enabled = false;
     if (mState->mFeature.mLighting) {
@@ -930,7 +930,7 @@ bool RGLInterfaceImplV_1_0::enabledLighting()
     return enabled;
 }
 
-void RGLInterfaceImplV_1_0::applyLighting(RGLInterfaceImplV_1_0Primitive *primitive,
+void RGles1xImpl::applyLighting(RGles1xImplPrimitive *primitive,
         RGLColorf * colors)
 {
     if (!mState->mFeature.mLighting) {
@@ -950,7 +950,7 @@ void RGLInterfaceImplV_1_0::applyLighting(RGLInterfaceImplV_1_0Primitive *primit
 
     for (int lightIndex = 0; lightIndex < GL_MAX_LIGHT_UNITS; ++lightIndex) {
         if (mState->mFeature.mLights[lightIndex]) {
-            RGLInterfaceImplV_1_0Light & light = mState->mLights[lightIndex];
+            RGles1xImplLight & light = mState->mLights[lightIndex];
 
             for (int j = 0; j < primitive->mCount; ++j) {
                 RGLVectorf & position = primitive->mPoints[j];
@@ -1008,14 +1008,14 @@ void RGLInterfaceImplV_1_0::applyLighting(RGLInterfaceImplV_1_0Primitive *primit
     }
 }
 
-void RGLInterfaceImplV_1_0::clipAndRasterization(
-    RGLInterfaceImplV_1_0Primitive *primitive)
+void RGles1xImpl::clipAndRasterization(
+    RGles1xImplPrimitive *primitive)
 {
-    RGLInterfaceImplV_1_0Fragments fragments(mState->mWidth, mState->mHeight);
+    RGles1xImplFragments fragments(mState->mWidth, mState->mHeight);
 
     switch (primitive->mMode) {
     case GL_POINTS: {
-        RGLInterfaceImplV_1_0Primitive pointPrimitive;
+        RGles1xImplPrimitive pointPrimitive;
         pointPrimitive.mCount = 1;
         pointPrimitive.mMode = GL_POINTS;
         for (int i = 0; i < primitive->mCount; ++i) {
@@ -1045,7 +1045,7 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
 
         const GLint size = primitive->mCount / 2;
 
-        RGLInterfaceImplV_1_0Primitive linePrimitive;
+        RGles1xImplPrimitive linePrimitive;
         linePrimitive.mCount = 2;
         linePrimitive.mMode = GL_LINES;
 
@@ -1071,7 +1071,7 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             break;
         }
 
-        RGLInterfaceImplV_1_0Primitive linePrimitive;
+        RGles1xImplPrimitive linePrimitive;
         linePrimitive.mCount = 2;
         linePrimitive.mMode = GL_LINES;
 
@@ -1134,7 +1134,7 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             break;
         }
 
-        RGLInterfaceImplV_1_0Primitive linePrimitive;
+        RGles1xImplPrimitive linePrimitive;
         linePrimitive.mCount = 2;
         linePrimitive.mMode = GL_LINES;
 
@@ -1188,7 +1188,7 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
         /* if not a multiple of 3 ignore the remainder when divided by 3 */
         const GLint size = primitive->mCount / 3;
 
-        RGLInterfaceImplV_1_0Primitive trianglePrimitive;
+        RGles1xImplPrimitive trianglePrimitive;
         trianglePrimitive.mCount = 3;
         trianglePrimitive.mMode = GL_TRIANGLES;
 
@@ -1213,7 +1213,7 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             break;
         }
 
-        RGLInterfaceImplV_1_0Primitive trianglePrimitive;
+        RGles1xImplPrimitive trianglePrimitive;
         trianglePrimitive.mCount = 3;
         trianglePrimitive.mMode = GL_TRIANGLES;
 
@@ -1269,7 +1269,7 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
             break;
         }
 
-        RGLInterfaceImplV_1_0Primitive trianglePrimitive;
+        RGles1xImplPrimitive trianglePrimitive;
         trianglePrimitive.mCount = 3;
         trianglePrimitive.mMode = GL_TRIANGLES;
 
@@ -1328,8 +1328,8 @@ void RGLInterfaceImplV_1_0::clipAndRasterization(
     }
 }
 
-bool RGLInterfaceImplV_1_0::depthTest(
-    const RGLInterfaceImplV_1_0Fragments::Fragment & fragment)
+bool RGles1xImpl::depthTest(
+    const RGles1xImplFragments::Fragment & fragment)
 {
     bool result = true;
 
@@ -1348,14 +1348,14 @@ bool RGLInterfaceImplV_1_0::depthTest(
     return result;
 }
 
-void RGLInterfaceImplV_1_0::applyTextureMapping(
-    RGLInterfaceImplV_1_0Fragments &fragments)
+void RGles1xImpl::applyTextureMapping(
+    RGles1xImplFragments &fragments)
 {
 	RGLVectorf result;
-	RGLInterfaceImplV_1_0Texture * texture = getCurrentTexture();
+	RGles1xImplTexture * texture = getCurrentTexture();
 	if (mState->mFeature.mTexture2D && texture) {
 		for (int i = 0; i < fragments.count(); ++i) {
-			RGLInterfaceImplV_1_0Fragments::Fragment &fragment = fragments.data()[i];
+			RGles1xImplFragments::Fragment &fragment = fragments.data()[i];
 			if (fragment.mValid) {
 				nearestFilter(texture, fragment.mTexCoords.x(), fragment.mTexCoords.y(), result);
 
@@ -1367,6 +1367,7 @@ void RGLInterfaceImplV_1_0::applyTextureMapping(
 
 				case GL_MODULATE:
 					fragment.mColor *= result;
+					fragment.mColor.clampValues();
 					break;
 				}
 			}
@@ -1374,15 +1375,15 @@ void RGLInterfaceImplV_1_0::applyTextureMapping(
 	}
 }
 
-void RGLInterfaceImplV_1_0::perFragmentOperations(
-    RGLInterfaceImplV_1_0Fragments &fragments)
+void RGles1xImpl::perFragmentOperations(
+    RGles1xImplFragments &fragments)
 {
 	applyTextureMapping(fragments);
 
     bool depthTestResult = true;
 
     for (int i = 0; i < fragments.count(); ++i) {
-        RGLInterfaceImplV_1_0Fragments::Fragment &fragment = fragments.data()[i];
+        RGles1xImplFragments::Fragment &fragment = fragments.data()[i];
 
         if (fragment.mValid) {
             /* do depth test (if not enabled will allways pass )*/
@@ -1397,7 +1398,7 @@ void RGLInterfaceImplV_1_0::perFragmentOperations(
     fragments.reset();
 }
 
-RGLInterfaceImplV_1_0::OutCode RGLInterfaceImplV_1_0::computeOutCode(
+RGles1xImpl::OutCode RGles1xImpl::computeOutCode(
     GLfloat x, GLfloat y,
     GLfloat xmin, GLfloat ymin,
     GLfloat xmax, GLfloat ymax)
@@ -1419,7 +1420,7 @@ RGLInterfaceImplV_1_0::OutCode RGLInterfaceImplV_1_0::computeOutCode(
     return code;
 }
 
-int RGLInterfaceImplV_1_0::clipLine(RGLVectorf &p1, RGLVectorf &p2)
+int RGles1xImpl::clipLine(RGLVectorf &p1, RGLVectorf &p2)
 {
     const GLfloat xmin = 0.0f;
     const GLfloat ymin = 0.0f;
@@ -1476,16 +1477,16 @@ int RGLInterfaceImplV_1_0::clipLine(RGLVectorf &p1, RGLVectorf &p2)
 }
 
 /* textures */
-void RGLInterfaceImplV_1_0::genTextures(GLsizei n, GLuint *textures)
+void RGles1xImpl::genTextures(GLsizei n, GLuint *textures)
 {
     for (int i = 0; i < n; ++i) {
-        RGLInterfaceImplV_1_0Texture * tex = new RGLInterfaceImplV_1_0Texture();
+        RGles1xImplTexture * tex = new RGles1xImplTexture();
         textures[i] = mState->mTextures.size();
         mState->mTextures.insert(std::make_pair(textures[i], tex));
     }
 }
 
-void RGLInterfaceImplV_1_0::deleteTextures(GLsizei n, const GLuint *textures)
+void RGles1xImpl::deleteTextures(GLsizei n, const GLuint *textures)
 {
     for (int i = 0; i < n; ++i) {
         TextureListIter iter = mState->mTextures.find(textures[i]);
@@ -1496,7 +1497,7 @@ void RGLInterfaceImplV_1_0::deleteTextures(GLsizei n, const GLuint *textures)
     }
 }
 
-void RGLInterfaceImplV_1_0::bindTexture(GLenum target, GLuint texture)
+void RGles1xImpl::bindTexture(GLenum target, GLuint texture)
 {
     RGLASSERT_WE(target == GL_TEXTURE_2D, GL_INVALID_VALUE);
 
@@ -1508,7 +1509,7 @@ void RGLInterfaceImplV_1_0::bindTexture(GLenum target, GLuint texture)
     }
 }
 
-void RGLInterfaceImplV_1_0::texEnv(GLenum target, GLenum pname, const GLint *params)
+void RGles1xImpl::texEnv(GLenum target, GLenum pname, const GLint *params)
 {
     RGLASSERT_WE(target == GL_TEXTURE_ENV, GL_INVALID_ENUM);
     RGLASSERT_WE(pname == GL_TEXTURE_ENV_MODE, GL_INVALID_ENUM);
@@ -1528,9 +1529,9 @@ void RGLInterfaceImplV_1_0::texEnv(GLenum target, GLenum pname, const GLint *par
     }
 }
 
-RGLInterfaceImplV_1_0Texture *RGLInterfaceImplV_1_0::getCurrentTexture()
+RGles1xImplTexture *RGles1xImpl::getCurrentTexture()
 {
-	RGLInterfaceImplV_1_0Texture * texture = 0;
+	RGles1xImplTexture * texture = 0;
 	TextureListIter iter = mState->mTextures.find(mState->mTextureUnits[mState->mCurrentActiveTexture].mBoundTexture);
 	if (iter != mState->mTextures.end()) {
 		texture = iter->second;
@@ -1538,7 +1539,7 @@ RGLInterfaceImplV_1_0Texture *RGLInterfaceImplV_1_0::getCurrentTexture()
 	return texture;
 }
 
-void RGLInterfaceImplV_1_0::texImage2D(GLenum target, GLint level, GLint internalformat,
+void RGles1xImpl::texImage2D(GLenum target, GLint level, GLint internalformat,
                                        GLsizei width, GLsizei height, GLint border,
                                        GLenum format, GLenum type, const GLvoid *pixels)
 {
@@ -1553,7 +1554,7 @@ void RGLInterfaceImplV_1_0::texImage2D(GLenum target, GLint level, GLint interna
     RGLASSERT_WE((width & (width - 1)) == 0, GL_INVALID_VALUE);
     RGLASSERT_WE((height & (height - 1)) == 0, GL_INVALID_VALUE);
 
-    RGLInterfaceImplV_1_0Texture *texture = getCurrentTexture();
+    RGles1xImplTexture *texture = getCurrentTexture();
     if (texture) {
     	texture->mTarget = target;
     	texture->mLevel = level;
@@ -1583,11 +1584,11 @@ void RGLInterfaceImplV_1_0::texImage2D(GLenum target, GLint level, GLint interna
     }
 }
 
-void RGLInterfaceImplV_1_0::texParameter(GLenum target, GLenum pname, const GLint *params)
+void RGles1xImpl::texParameter(GLenum target, GLenum pname, const GLint *params)
 {
     RGLASSERT_WE(target == GL_TEXTURE_2D, GL_INVALID_VALUE);
 
-    RGLInterfaceImplV_1_0Texture *texture = getCurrentTexture();
+    RGles1xImplTexture *texture = getCurrentTexture();
     if (texture) {
         switch (pname) {
         case GL_TEXTURE_WRAP_S:
@@ -1609,7 +1610,7 @@ void RGLInterfaceImplV_1_0::texParameter(GLenum target, GLenum pname, const GLin
     }
 }
 
-void RGLInterfaceImplV_1_0::nearestFilter(RGLInterfaceImplV_1_0Texture * texture,
+void RGles1xImpl::nearestFilter(RGles1xImplTexture * texture,
         GLfloat s, GLfloat t, RGLColorf & result)
 {
     s *= texture->mWidth;
@@ -1646,7 +1647,7 @@ void RGLInterfaceImplV_1_0::nearestFilter(RGLInterfaceImplV_1_0Texture * texture
     extractRGBA(texture, row, col, result);
 }
 
-void RGLInterfaceImplV_1_0::extractRGBA(RGLInterfaceImplV_1_0Texture * texture,
+void RGles1xImpl::extractRGBA(RGles1xImplTexture * texture,
                                         GLint row, GLint col, RGLColorf & result)
 {
     GLint index = (row * texture->mWidth + col) * 4;
