@@ -48,7 +48,7 @@ transformations_SOURCES = ../examples/transformations.cpp
 INCLUDES = -I../src -I../inc -I../src/gui -I../src/gles
 LIBS = librgui.a librgl.a -lGL -lGLU -lX11
 
-CXXFLAGS = -g3 -Wall -DGL_GLEXT_PROTOTYPES
+CXXFLAGS = -g3 -Wall -DGL_GLEXT_PROTOTYPES -fpermissive
 
 all: $(lib_PROGRAMS) $(bin_PROGRAMS) 
 
@@ -106,4 +106,3 @@ texturing: $(texturing_SOURCES)  $(lib_PROGRAMS)
 
 clean:
 	rm -rf $(bin_PROGRAMS) $(lib_PROGRAMS) *.o
-
