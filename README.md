@@ -1,7 +1,7 @@
 Introduction
 ------------
 
-[![Travis-CI](https://travis-ci.org/chikkutechie/rgles.svg?branch=master)](https://travis-ci.org/chikkutechie/rgles)
+[![Travis-CI](https://travis-ci.org/trsquarelab/rgles.svg?branch=master)](https://travis-ci.org/trsquarelab/rgles)
 
 rgles is a subset implementation of OpenGL/ES and EGL. The main aim of rgles is to understand the OpenGL/ES pipeline.
 Features supported are,
